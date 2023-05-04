@@ -36,7 +36,20 @@ Geomx_v2.RDS contains the cleaned up Geomx object (after core correction).
 
 
 ***
-### :three: Failed Analyses. 
+### :three: Analyses Group 3.
+**Description: Perform unsupervised clustering within cell type** <br>
+
+
+**3.1 Resting Fibroblast : Use cluster label as Y** <br>
+
+**3.2 Resting Fibroblast : Within each cluster, run HF vs Control** <br>
+
+**3.3 CD68 : Within each cluster, run HF vs Control** <br>
+
+**3.4 CD68 : Within each cluster, run HF vs Control** <br>
+
+***
+### :four: Failed Analyses. 
 These analyaes didn't work because the core made a multiplexing labeling error. All analyses have to be repeated. <br>
 **1.1 All Cell Type** <br>
 
