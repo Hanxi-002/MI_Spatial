@@ -15,7 +15,7 @@ def get_celltype_data(metadata, celltype):
     return cord_data, celltype_metadata
 
 def perform_gmm(cord_data):
-    gm = GaussianMixture(n_components=3, random_state=0).fit(cord_data)
+    gm = GaussianMixture(n_components=2, random_state=0).fit(cord_data)
     labels = gm.predict(cord_data)
     return labels
 
@@ -28,10 +28,13 @@ def plot_gmm(cord_data, celltype_metadata, labels):
 def save_new_metadata(celltype_metadata, path):
     celltype_metadata.to_excel(path)
 
-cord_data, celltype_metadata = get_celltype_data(metadata, "resting fibroblast")
+cord_data, celltype_metadata = get_celltype_data(metadata, "CD 68")
 labels = perform_gmm(cord_data)
 cord_data, celltype_metadata = plot_gmm(cord_data, celltype_metadata, labels)
-save_new_metadata(celltype_metadata, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/RestingFibro/RestingFibroblast_Cluster_Label.xlsx")
+#save_new_metadata(celltype_metadata, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/RestingFibro/RestingFibro_Cluster2_Label.xlsx")
+
+
+toy = celltype_metadata[(celltype_metadata['labels'] == 1)]
 
 
 

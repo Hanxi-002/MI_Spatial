@@ -3,13 +3,15 @@
 ## Notes
 1. First perform GMM analysis with prior decision of cluster number equals to 3. See GMM.py for detail. 
 2. Use the cluster labels as Ys
+3. For ER, only pipeline3 is ran.
+4. See the scatter plot for the clustering at RF_clustering3.png
 
 ## Links
-* [New Metadata]() Resting Fibroblast specific metadata with cluster labels. 
+* [New Metadata](https://pitt-my.sharepoint.com/personal/xiaoh_pitt_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fxiaoh%5Fpitt%5Fedu%2FDocuments%2FMI%5FSpatial%2FER%5FSLIDE%2FRestingFibro&view=0) Resting Fibroblast specific metadata with cluster labels. 
 
-* [ER Input Data]()
+* [ER Input Data](https://pitt-my.sharepoint.com/personal/xiaoh_pitt_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fxiaoh%5Fpitt%5Fedu%2FDocuments%2FMI%5FSpatial%2FER%5FSLIDE%2FRestingFibro%2F050123%2FData&view=0)
 
-* [ER Output]()
+* [ER Output](https://pitt-my.sharepoint.com/personal/xiaoh_pitt_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fxiaoh%5Fpitt%5Fedu%2FDocuments%2FMI%5FSpatial%2FER%5FSLIDE%2FRestingFibro%2F050123%2FER%5FResults&view=0)
 
 * [SLIDE Output]()
 

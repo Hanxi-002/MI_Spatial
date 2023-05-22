@@ -1,5 +1,7 @@
-library(readxl)
+# Labels assigned by using GMM.py
+# Produce X and Y, Y is spatial cluster label.
 
+library(readxl)
 
 data <- readRDS("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Geomx_v2.RDS")
 metadata <- read_excel("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/CD68/CD68_Cluster_Label.xlsx")
