@@ -24,14 +24,14 @@ DCCFiles <- dir(file.path(datadir, "DCC-20230127"), pattern = ".dcc$", full.name
 PKCFiles <- dir(file.path(datadir), pattern = ".pkc$", full.names = TRUE, recursive = TRUE)
 
 #SampleAnnotationFile <- dir(file.path(datadir, "annotation"), pattern = ".xlsx$", full.names = TRUE, recursive = TRUE)
-SampleAnnotationFile <- "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/Dutta_NanoString/Annotation Dutta sample info V4.xlsx"
+SampleAnnotationFile <- "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/raw_data/Dcc_Initial_Dataset_Dutta02.xlsx"
 
 demoData <- readNanoStringGeoMxSet(dccFiles = DCCFiles,
                                    pkcFiles = PKCFiles,
                                    phenoDataFile = SampleAnnotationFile,
                                    phenoDataSheet = "Sheet1",
-                                   phenoDataDccColName = "DCCnames",
-                                   protocolDataColNames = c("Scan name", "Segment tags", "ROI_ID", 'Status'),
+                                   phenoDataDccColName = "DccNames",
+                                   protocolDataColNames = c("ScanLabel", "SegmentLabel", "ROILabel", 'Status'),
                                    experimentDataColNames = c("Status"))
 pkcs <- annotation(demoData)
 modules <- gsub(".pkc", "", pkcs)
@@ -191,7 +191,7 @@ neg_probes <- unique(negativeProbefData$TargetName)
 
 #5% detection rate
 target_demoData <-
-  target_demoData[fData(target_demoData)$DetectionRate >= 0.01 |
+  target_demoData[fData(target_demoData)$DetectionRate >= 0.03 |
                     fData(target_demoData)$TargetName %in% neg_probes, ]
 dim(target_demoData)
 
@@ -201,7 +201,7 @@ dim(target_demoData)
 target_demoData <- normalize(target_demoData , norm_method="quant",
                              desiredQuantile = .75, toElt = "q_norm")
 
-#saveRDS(target_demoData, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MultiOmic/Dutta_Spatial/ER_SLIDE/Geomx_v2.RDS")
+#saveRDS(target_demoData, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Geomx_v3.RDS")
 
 ##################################################################
 ##                        Zero Filtering                        ##
@@ -270,5 +270,27 @@ y <- recode(subset_demoData@phenoData@data[["Segment (Name/ Label)"]], 'CD 68' =
 
 write.csv(t(data_mat), '/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MultiOmic/Dutta_Spatial/ER_SLIDE/HF/CdVRest/022823/Data/x.csv')
 write.csv(y, '/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MultiOmic/Dutta_Spatial/ER_SLIDE/HF/CdVRest/022823/Data/y.csv')
+
+##################################################################
+##                   Within Region Comparison                   ##
+##################################################################
+y <- as.matrix(read.csv("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/052223/Data/y.csv", row.names = 1))
+
+GetMatrix <- function(status, data_object){
+  dim(data_object)
+  subset_demoData <- data_object[ , data_object@protocolData@data[['Status']] == status]
+  data_mat <- as.matrix(exprs(subset_demoData))
+  names <- paste0(row.names(y), ".dcc")
+  final_x <- t(data_mat[ ,which(colnames(data_mat) %in% names)])
+  cat(dim(final_x))
+  return(final_x)
+}
+
+CD68_control <- GetMatrix("Control", target_demoData)
+control_y <- y[which(row.names(y) %in% colnames(CD68_control))  , ]
+CD68_HF <- GetMatrix("HF", target_demoData)
+
+write.csv(t(CD68), "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/052223_all/Data/x.csv")
+
 
 

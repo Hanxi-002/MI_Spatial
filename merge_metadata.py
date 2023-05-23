@@ -135,3 +135,28 @@ for j in range(len(new_id)):
         annot.loc[(annot["ScanLabel"] == group) & (annot["ROILabel"] == roi_id[j]) & (annot['SegmentLabel'] == seg), 'DCCnames'] = temp_row['Sample_ID'].values[0]
         
 #annot.to_excel("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/Dutta_NanoString/Annotation Dutta sample info V3.xlsx")
+
+#%%Add Dccname column to initial Dataset Dutta02.xlsx
+import pandas as pd
+import numpy as np
+annot = pd.read_excel("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/raw_data/Initial Dataset Dutta02.xlsx")
+worksheet = pd.read_csv("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/raw_data/Dutta_LabWorksheet_HX.txt", sep = 
+                        "\t")
+
+annot['DccNames'] = np.arange(0, len(annot), 1)
+
+for s in annot["SlideName"].unique():
+    df_slide = annot[annot["SlideName"] == s]
+    for r in df_slide["ROILabel"].unique():
+        df_roi = df_slide[df_slide["ROILabel"] == r]
+        if len(str(r)) == 1:
+            roi_id = '="00'+ str(r) + '"'
+        elif len(str(r)) == 2:
+            roi_id = '="0'+ str(r) + '"'
+        df_worksheet = worksheet[(worksheet["slide name"] == s) & (worksheet["roi"] == roi_id)]
+        #iterate each row in roi_id
+        for i, row in df_roi.iterrows():
+            dcc = df_worksheet[df_worksheet["segment"] == row["SegmentLabel"]]["Sample_ID"]
+            annot.loc[i, "DccNames"] = dcc.values[0]
+
+annot.to_excel("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/Dutta_NanoString/Dcc_Initial_Dataset_Dutta02.xlsx")
