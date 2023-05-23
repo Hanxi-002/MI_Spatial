@@ -286,10 +286,25 @@ GetMatrix <- function(status, data_object){
   return(final_x)
 }
 
-CD68_control <- GetMatrix("Control", target_demoData)
-control_y <- y[which(row.names(y) %in% colnames(CD68_control))  , ]
-CD68_HF <- GetMatrix("HF", target_demoData)
+MatchRows <- function(x, y){
+  sorted_x <- x[match(row.names(x), row.names(y)), ]
+  if(sum(row.names(sorted_x) != row.names(y)) != 0){stop("X and Y do not have the same row order relation...")}
+  return(sorted_x)
+}
 
+CD68_control <- GetMatrix("Control", target_demoData)
+control_y <- as.data.frame(y[row.names(y) %in% row.names(CD68_control), ])
+CD68_control <- MatchRows(CD68_control, control_y)
+
+CD68_HF <- GetMatrix("HF", target_demoData)
+HF_y <- as.data.frame(y[row.names(y) %in% row.names(CD68_HF), ])
+if (dim(CD68_HF)[1] != nrow(HF_y)){stop("dimensions don't match")}
+CD68_HF <- MatchRows(CD68_HF, HF_y)
+
+write.csv(CD68_control, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/052223_control/Data/x.csv")
+write.csv(control_y, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/052223_control/Data/y.csv")
+write.csv(CD68_HF, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/052223_hf/Data/x.csv")
+write.csv(HF_y, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/052223_hf/Data/y.csv")
 write.csv(t(CD68), "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/052223_all/Data/x.csv")
 
 
