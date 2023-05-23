@@ -4,6 +4,9 @@
 *.txt
 *.pkc
 *.csv
+*.rds
+*.RDS
+*.pdf
 # History files
 .Rhistory
 .Rapp.history
