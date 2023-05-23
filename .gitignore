@@ -2,7 +2,8 @@
 *.zip
 *.xlsx
 *.txt
-
+*.pkc
+*.csv
 # History files
 .Rhistory
 .Rapp.history
