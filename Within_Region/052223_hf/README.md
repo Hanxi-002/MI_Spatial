@@ -6,7 +6,9 @@ This analysis only includes the HF regions.
 
 Note that within each region, each cell type has a dcc file. So only used the CD68 dcc files. 
 ## Links
+[]()
 
 
 
 ## Notes
+* The violin plot shows very little difference. Need to run the entire pipeline and check if better delta and lambda will help with the prediction power. 
