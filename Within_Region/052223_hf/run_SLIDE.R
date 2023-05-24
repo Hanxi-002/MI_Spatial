@@ -17,5 +17,4 @@ num_top_feats <- 10
 condition <- "corr"
 Final_res <- SLIDEHelper::GetTopFeatures(x_path, y_path, er_path, out_path, SLIDE_res, num_top_feats = 10, condition = "corr")
 
-cat("here")
 saveRDS(Final_res, "/ix/djishnu/Hanxi/MI_Spatial/Within_Region/052223_hf/SLIDE_res.rds")
