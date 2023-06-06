@@ -8,5 +8,5 @@ if(is.na(cores)) cores <- detectCores()
 registerDoParallel(cores)
 cat('number of cores using', cores, '. . .\n')
 
-yaml_path = '/ix/djishnu/Hanxi/MI_Spatial/Within_Region/052423_all/pipeline1.yaml'
-pipelineER1(yaml_path, "all")
+yaml_path = '/ix/djishnu/Hanxi/MI_Spatial/Within_Region/052423_all/pipeline3.yaml'
+pipelineER3(yaml_path)
