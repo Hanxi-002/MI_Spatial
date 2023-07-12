@@ -8,6 +8,7 @@
 *.RDS
 *.pdf
 *.out
+*.png
 # History files
 .Rhistory
 .Rapp.history
