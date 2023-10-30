@@ -13,6 +13,3 @@
 
 * [SLIDE Output]()
 
-## Notes
-1. 
-
