@@ -1,16 +1,46 @@
 # region by gene in AF and gene in RF (each gene will show up twice)
 library(readxl)
 data <- readRDS("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Geomx_v3.RDS")
+annot <- read.csv("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/HF_Final_Annotation_RFAF_Ratio.csv")
 
-y <- as.matrix(read.csv("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/060723_hf/Data/y_w_ROI.csv",
-                        row.names = 1))
-#metadata <- read_excel("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/CD68/CD68_Cluster_Label.xlsx")
+expr_mat <- data@assayData$exprs
+norm_mat <- data@assayData$q_norm
+
+trim_strings <- function(strings) {
+  sapply(strings, function(x) substr(x, 1, nchar(x) - 4))
+}
+
+top_variance <- function(matrix, n) {
+  variances <- apply(matrix, 2, var)
+  top_indices <- order(variances, decreasing = TRUE)[1:n]
+  return(top_indices)
+}
+
+subset_celltype <- function(annot, cell_type, x_mat){
+  cell_type_Dcc = annot[annot$SegmentLabel == cell_type, ]$DCCnames
+  cell_type_x <- x_mat[, colnames(x_mat) %in% cell_type_Dcc]
+}
 
 
-hf_data <- data[ , data@protocolData@data[['Status']] == "HF"]
+# match DCC names in the GeoMX object and the annot file
+# the annot file here only contains HF samples
+colnames(expr_mat) <- trim_strings(colnames(expr_mat))
+# subset the expression matrix
+expr_mat <- expr_mat[, colnames(expr_mat) %in% annot$DCCnames]
+dim(expr_mat)
 
-x <- matrix(nrow = nrow(y), ncol = (dim(data)[1] * 2))
-dim(x)
+# split expression matrix into active and resting
+AF_expr_mat <- subset_celltype(annot, "active fibroblast", expr_mat)
+RF_expr_mat <- subset_celltype(annot, "resting fibroblast", expr_mat)
+dim(AF_expr_mat)
+dim(RF_expr_mat)
+
+# get the highes variant gene in each cell type
+
+
+# colnames(norm_mat) <- trim_strings(colnames(norm_mat))
+# norm_mat <- norm_mat[, colnames(norm_mat) %in% annot$DCCnames]
+# dim(norm_mat)
 
 
 for (r in 1:nrow(y)){
@@ -39,7 +69,7 @@ for (r in 1:nrow(y)){
 
 row.names(x) <- row.names(y)
 y <-as.numeric(y[, 'Labels'])
-write.csv(x, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/060723_hf/Data/x.csv")
-write.csv(y, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/060723_hf/Data/y.csv")
+#write.csv(x, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/060723_hf/Data/x.csv")
+#write.csv(y, "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/ER_SLIDE/Within_Region/060723_hf/Data/y.csv")
 
 
