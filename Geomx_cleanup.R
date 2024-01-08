@@ -240,6 +240,7 @@ write.csv(y, '/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/
 ##################################################################
 #data_mat <- as.matrix(exprs(target_demoData))
 #dim(data_mat)
+#target_demoData = Geomx_V3
 subset_demoData <- subset(target_demoData, select = phenoData(target_demoData)[["Segment (Name/ Label)"]] != 'CD 68')
 subset_demoData <- subset_demoData[ , subset_demoData@protocolData@data[['Status']] == "Control"]
 dim(subset_demoData)

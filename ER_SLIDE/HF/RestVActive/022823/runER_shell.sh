@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH -t 3-00:00
 
-#SBATCH --job-name=AllCellP3
+#SBATCH --job-name=HF_RvA
 # partition (queue) declaration
 
 #SBATCH --mail-user=xiaoh@pitt.edu

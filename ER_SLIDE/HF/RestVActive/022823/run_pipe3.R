@@ -8,5 +8,5 @@ if(is.na(cores)) cores <- detectCores()
 registerDoParallel(cores)
 cat('number of cores using', cores, '. . .\n')
 
-yaml_path = '/ix/djishnu/Hanxi/Dutta/HF/RestVActive/022823/pipeline3.yaml'
+yaml_path = '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/HF/RestVActive/022823/pipeline3.yaml'
 pipelineER3(yaml_path)
