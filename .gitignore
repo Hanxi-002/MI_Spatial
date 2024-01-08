@@ -9,6 +9,7 @@
 *.pdf
 *.out
 *.png
+*.dcc
 # History files
 .Rhistory
 .Rapp.history
