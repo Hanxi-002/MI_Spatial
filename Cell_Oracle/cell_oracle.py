@@ -1,6 +1,7 @@
 import os
 import sys
 import matplotlib.pyplot as plt
+import pickle as pkl
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -30,6 +31,16 @@ celltype_df.index == data.columns
 adata.obs['cell_type'] = celltype_df['SegmentLabel']
 adata.obs['status'] = celltype_df['Status']
 
+#%% add raw counts
+raw_data = pd.read_csv('all_cell.csv', index_col=0)
+adata_raw = ad.AnnData(X=raw_data.T)
+adata.raw = adata_raw
+adata.layers['raw_count'] = adata.raw.X.copy()
+
+#%% filter highly variable genes
+
+
+
 #%%
 #Z score the data first
 #sc.pp.scale(adata, max_value=None)  # Scale the data
@@ -52,6 +63,9 @@ sc.pl.tsne(adata, color='status')
 
 # umap_coords = pd.DataFrame(adata.obsm["X_umap"])
 # umap_coords.index = adata.obs_names
+
+#save adata to a pickle file
+#adata.write("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/allcell_allcondition_adata.pkl")
 
 #%% check if the UMAP clustering driven by ROI/AOI location?
 # get a object with hf macrophage only
@@ -76,32 +90,33 @@ plt.plot(hf_mac.obsm['X_umap'][:,0], hf_mac.obsm['X_umap'][:,1], 'o')
 # for each cluster, subset into a new anndata and plot the locations of each AOI in that cluster
 c1 = hf_mac[(hf_mac.obsm['X_umap'][:, 0] <= 0 ) & (hf_mac.obsm['X_umap'][:, 1] <= 0 )]
 plt.plot(c1.obsm['X_umap'][:,0], c1.obsm['X_umap'][:,1], 'o')
-plt.xlim(-10, 15)
-plt.ylim(-5, 15)
+plt.xlim(-10, 20)
+plt.ylim(-10, 12)
 c1.shape
-plt.plot(c1.obs['ROICoordinateX'], c1.obs['ROICoordinateY'], 'o')
-plt.xlim(7000, 35000)
-plt.ylim(7000, 40000)
 
-c2 = hf_mac[(hf_mac.obsm['X_umap'][:, 0] >= 0 ) & (hf_mac.obsm['X_umap'][:, 1] <= 0 )]
+c2 = hf_mac[(hf_mac.obsm['X_umap'][:, 0] >= 0 ) & (hf_mac.obsm['X_umap'][:, 1] <= 2.5 )]
 plt.plot(c2.obsm['X_umap'][:,0], c2.obsm['X_umap'][:,1], 'o')
-plt.xlim(-10, 15)
-plt.ylim(-5, 15)
+plt.xlim(-10, 20)
+plt.ylim(-10, 12)
 c2.shape
-plt.plot(c2.obs['ROICoordinateX'], c2.obs['ROICoordinateY'], 'o')
-plt.xlim(7000, 35000)
-plt.ylim(7000, 40000)
 
-c3 = hf_mac[(hf_mac.obsm['X_umap'][:, 0] >= 0 ) & (hf_mac.obsm['X_umap'][:, 1] >= 0 )]
+c3 = hf_mac[(hf_mac.obsm['X_umap'][:, 0] >= 0 ) & (hf_mac.obsm['X_umap'][:, 1] >= 2.5 )]
 plt.plot(c3.obsm['X_umap'][:,0], c3.obsm['X_umap'][:,1], 'o')
-plt.xlim(-10, 15)
-plt.ylim(-5, 15)
+plt.xlim(-10, 20)
+plt.ylim(-10, 12)
 c3.shape
+
+# plot the AOIs in each cluster with their location
+plt.plot(c1.obs['ROICoordinateX'], c1.obs['ROICoordinateY'], 'o')
+plt.plot(c2.obs['ROICoordinateX'], c2.obs['ROICoordinateY'], 'o')
 plt.plot(c3.obs['ROICoordinateX'], c3.obs['ROICoordinateY'], 'o')
 plt.xlim(7000, 35000)
 plt.ylim(7000, 40000)
+plt.xlabel('X coordinate')
+plt.ylabel('Y coordinate')
+plt.show()
 
-# to make this more quantified, calculat the inter and intra cluster distance for each aoi
+#%% to make this more quantified, calculat the inter and intra cluster distance for each aoi
 c1_dist_array =pd.DataFrame({'x' : c1.obs['ROICoordinateX'], 'y' : c1.obs['ROICoordinateY']})
 c1_intra = dist.squareform(dist.pdist(c1_dist_array.to_numpy()))
 
@@ -129,8 +144,6 @@ plt.xlabel('Cluster 3')
 plt.ylabel('Cluster 3')
 plt.show()
 
-
-
 # calculate the inter cluster distance
 c1_c2_inter = dist.cdist(c1_dist_array.to_numpy(), c2_dist_array.to_numpy())
 c1_c3_inter = dist.cdist(c1_dist_array.to_numpy(), c3_dist_array.to_numpy())
@@ -153,6 +166,21 @@ plt.colorbar()
 plt.xlabel('Cluster 3')
 plt.ylabel('Cluster 2')
 plt.show()
+
+#%%
+oracle = co.Oracle()
+print("Metadata columns :", list(adata.obs.columns))
+print("Dimensional reduction: ", list(adata.obsm.keys()))
+
+adata_raw = adata.copy()
+
+adata.X = adata.layers["raw_count"].copy()
+
+# Instantiate Oracle object.
+oracle.import_anndata_as_raw_count(adata=adata_raw,
+                                   cluster_column_name="louvain",
+                                   embedding_name="X_umap")
+
 
 #%% check the clustering quality by comparing with the true cell type in meta data
 
