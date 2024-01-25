@@ -10,6 +10,9 @@
 *.out
 *.png
 *.dcc
+*.h5ad
+*.celloracle.links
+*.celloracle.oracle
 # History files
 .Rhistory
 .Rapp.history
