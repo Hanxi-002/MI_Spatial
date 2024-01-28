@@ -1,7 +1,9 @@
+#%%
 import os
 import sys
 import matplotlib.pyplot as plt
 import pickle as pkl
+import dill
 import numpy as np
 import pandas as pd
 import scanpy as sc
@@ -9,12 +11,12 @@ import seaborn as sns
 import anndata as ad
 import celloracle as co
 import scipy.spatial.distance as dist
+import os
 %matplotlib inline
 
 #%% load data in annData format
 
 # input x should be a dataframe with genes as columns and cells as rows
-
 # creating an object of class adata_oracle that can contain all information
 class adata_oracle:
 
@@ -72,7 +74,7 @@ class adata_oracle:
         self.adata.write_h5ad(file_name)
 
 
-#%% main 
+#%% main for adata project process
 ############## load data
 print(os.getcwd())
 
@@ -254,8 +256,185 @@ links = oracle.get_links(cluster_name_for_GRN_unit="louvain", alpha=10,
                          verbose_level=10)
 
 links.to_hdf5(file_path="allcell.celloracle.links")
-#%%
 
-links = co.load_hdf5('links.celloracle.links')
+#%%
+class oracle_links:
+    def __init__(self, file_name):
+        """Load the links object from the cell oracle. The links object should be ending with xx.celloracle.links.
+
+        Args:
+            file_name (str): the path to the object
+        """
+        self.links = co.load_hdf5(file_name)
+
+    # filter the links by p value first.
+    def filter_pval(self, p_thresh = 10**-5):
+        """Before doing futhur filtering, first delete low quality links by using p value.
+            This method will change the links_dict in the object.
+        Args:
+            p_thresh (int, optional): the p value threshold. Defaults to 10**-5.
+        """
+        for c in range(len(self.links.links_dict.keys())):
+            print(f"Before Filtering: cluster {str(c)} has {len(self.links.links_dict[str(c)])} links.")
+            post_links = pd.DataFrame(self.links.links_dict[str(c)])
+            post_links = post_links[post_links['p'] < p_thresh]
+            print(f"After Filtering: cluster {str(c)} has {len(post_links)} links.")
+            self.links.links_dict[str(c)] = post_links
+
+    def calc_weighted_logp(self):
+        """Add a column of weighted logp to each dataframe for each cluster in the \
+            links_dict in the object.
+        """
+        for c in range(len(self.links.links_dict.keys())):
+           df =  pd.DataFrame(self.links.links_dict[str(c)])
+           df['weighted_logp'] = df['-logp'] * df['coef_abs']
+           df = df.sort_values(by=['weighted_logp'], ascending=False)
+           self.links.links_dict[str(c)] = df
+
+    def filter_human_TF(self, human_TF):
+        """Filter out links(edges) that neither source or target node is \
+           in the human_TF dataframe
+        Args:
+            human_TF (data frame): a dataframe with one column containing human TF names.
+        """
+        for c in range(len(self.links.links_dict.keys())):
+            df = self.links.links_dict[str(c)]
+            filtered_df = df[df['source'].isin(human_TF[0]) \
+                               | df['target'].isin(human_TF[0])]
+            self.links.links_dict[str(c)] = filtered_df
+            print(f"Cluster {str(c)} has {len(df) - len(filtered_df)} links that are not found in database.")
+
+
+    def get_top_links(self, percentile = 0.1):
+        """For each cluster and each TF, get the top percentile links based on weighted logp.\
+           Save the degree dataframe in self.TF_degree_dict.
+           Save the top links in filtered_links_dict
+
+        Args:
+            percentile (float, optional): the percentage of top links. Defaults to 0.1.
+        """
+        TF_degree_dict = {}
+        filtered_links_dict = {}
+        for c in range(len(self.links.links_dict.keys())):
+            df = self.links.links_dict[str(c)]
+            print(f"Before filtering: Cluster {str(c)} has {len(df)} links.")
+            # get the list of all TFs in the cluster
+            list_TFs = list(set(df['source']).union(set(df['target'])))
+            
+            # create a dataframe to store the degree of each TF
+            out_counts = df['source'].value_counts()
+            in_counts = df['target'].value_counts()
+            degree_df = pd.DataFrame(index = list_TFs)
+            degree_df['out_degree'] = degree_df.index.map(out_counts).fillna(0)
+            degree_df['in_degree'] = degree_df.index.map(in_counts).fillna(0)
+            degree_df['degree'] = degree_df['out_degree'] + degree_df['in_degree']
+            degree_df['filtered_out_degree'] = 0
+            degree_df['filtered_in_degree'] = 0
+            degree_df['filtered_degree'] = 0
+            
+            filtered_edges = pd.DataFrame()
+            for TF in list_TFs:
+                temp_df = df[(df['source'] == TF) | (df['target'] == TF)]
+                temp_df = temp_df.sort_values(by=['weighted_logp'], ascending=False)
+                temp_df = temp_df.iloc[0: int(len(temp_df) * percentile)]
+                filtered_edges = filtered_edges.append(temp_df)
+                degree_df.at[TF, 'filtered_out_degree'] = len(temp_df[temp_df['source'] == TF])
+                degree_df.at[TF, 'filtered_in_degree'] = len(temp_df[temp_df['target'] == TF])
+                degree_df.at[TF, 'filtered_degree'] = len(temp_df)
+
+            print(f"After filtering: Cluster {str(c)} has {len(filtered_edges)} links.")
+            TF_degree_dict[str(c)] = degree_df.sort_values(by=['filtered_degree'], ascending=False)
+            filtered_links_dict[str(c)] = filtered_edges
+        
+        # save the 2 dicts to object
+        self.TF_degree_dict = TF_degree_dict
+        self.filtered_links_dict = filtered_links_dict
+    
+    def degree_1_SLIDE_overlap(self, latent_factors):
+        """Pull out TFs discovered in SLIDE results. Store the result in a dict in \
+        oracle_links.degree_1_overlap.
+        Args:
+            latent_factors (dict): a dictionary of dataframes, \
+                where each dataframe is a latent factor.
+        """
+        degree_1_overlap = dict()
+        for c in range(len(self.filtered_links_dict.keys())):
+            df = self.filtered_links_dict[str(c)]
+
+            # get all the node names for that cluster
+            cluster_TF = list(set(df['source']).union(set(df['target'])))
+            print(f"Cluster {str(c)} has {len(cluster_TF)} nodes.")
+            # get the overlap between cluster node names and human TFs
+            cluster_TF = [x for x in cluster_TF if x in list(human_TF[0])]
+            print(f"Cluster {str(c)} has {len(cluster_TF)} TFs.")
+            
+            overlap_df = pd.DataFrame()
+            for lf in latent_factors.keys():
+                lf_df = latent_factors[lf]
+                lf_TF = list(lf_df['names'])
+                overlap = list(set(cluster_TF).intersection(set(lf_TF)))
+                temp_df = pd.DataFrame({'cluster':str(c), 'latent_factor': lf, 'overlap': overlap})
+                overlap_df = overlap_df.append(temp_df)
+            degree_1_overlap[str(c)] = overlap_df
+        self.degree_1_overlap = degree_1_overlap
+
+
+#%%  load the links object and filter.
+'''
+Load link object.
+Filter solely based on p value.
+Calculate weighted logp (coef_abs * -logp).
+(??)For each cluster, filter out links(edges) that neither source or target nodes are \
+    in the human TF list.(???)
+For each TF, rank links(edges) by weighted logp and take top percentile.\
+    (save degree and new edges to object.)
+
+'''
+
+oracle_links = oracle_links("allcell.celloracle.links")
+oracle_links.filter_pval()
+oracle_links.calc_weighted_logp()
+oracle_links.links.links_dict['0'].head()
+
+# load the human TF list
+# use pandas to read a txt file where each row contains one gene nam
+human_TF = pd.read_csv('allTFs_hg38_Scenic.txt', header=None)
+oracle_links.filter_human_TF(human_TF=human_TF)
+
+#this might take a few minutes
+oracle_links.get_top_links(percentile = 0.1)
+oracle_links.TF_degree_dict # the degree of each NODE in each cluster
+oracle_links.filtered_links_dict # the top links for each NODE in each cluster
+
+#using dill to save the object
+#dill.dump(oracle_links, open('allcell_oracle_links.pkl', 'wb'))
+
+
+#%% Pull out TFs discovered in SLIDE
+# load the SLIDE results
+def load_SLIDE_res(folder_path):
+    """Load SLIDE restulst as a dictionary.
+        Args:
+            folder_path (str): the path to the folder containing all SLIDE results.
+    """
+    latent_factors = {}  
+    for filename in os.listdir(folder_path):
+        if filename.endswith('.txt'): 
+            file_path = os.path.join(folder_path, filename)
+            df = pd.read_csv(file_path, delimiter='\t')
+            latent_factors[filename[0:-4]] = df
+    return latent_factors
+
+folder_path = '../ER_SLIDE/AllCell/022423/SLIDE_Results'  # Replace with your folder path
+latent_factors = load_SLIDE_res(folder_path)
+print(os.getcwd())
+#oracle_links = dill.load(open('allcell_oracle_links.pkl', 'rb'))
+oracle_links.degree_1_SLIDE_overlap(latent_factors = latent_factors)
+dill.dump(oracle_links, open('allcell_oracle_links.pkl', 'wb'))
+
+
+
+
+
 
 # %%
