@@ -1,16 +1,9 @@
-#%%
-import os
-import sys
 import matplotlib.pyplot as plt
-import pickle as pkl
-import dill
 import numpy as np
 import pandas as pd
 import scanpy as sc
 import seaborn as sns
 import anndata as ad
-import celloracle as co
-import scipy.spatial.distance as dist
 
 #%% load data in annData format
 
@@ -52,7 +45,7 @@ class adata_oracle:
     def tsne(self):
         sc.tl.tsne(self.adata)
     
-    def louvain(self, n_neighbors = 8, n_pcs = 50):
+    def louvain(self, n_neighbors = 10, n_pcs = 50):
         sc.pp.neighbors(self.adata, n_neighbors=n_neighbors, n_pcs=n_pcs)
         sc.tl.louvain(self.adata)
     

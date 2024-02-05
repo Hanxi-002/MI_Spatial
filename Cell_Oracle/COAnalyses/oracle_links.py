@@ -1,10 +1,7 @@
 import matplotlib.pyplot as plt
-import dill
 import numpy as np
 import pandas as pd
-import scanpy as sc
 import seaborn as sns
-import anndata as ad
 import celloracle as co
 
 class oracle_links:
@@ -99,7 +96,7 @@ class oracle_links:
         self.TF_degree_dict = TF_degree_dict
         self.filtered_links_dict = filtered_links_dict
     
-    def degree_1_SLIDE_overlap(self, latent_factors, human_TF):
+    def find_TF_overlap_SLIDE(self, latent_factors, human_TF):
         """Pull out TFs discovered in SLIDE results. Store the result in a dict in \
         oracle_links.degree_1_overlap.
         Args:
@@ -135,32 +132,41 @@ class oracle_links:
             latent_factors (dict): a dictionary of dataframes, \
                 where each dataframe is a latent factor.
         """
-        gene_TF = dict()
+        gene_TF = dict() # this is a dict of dict, where the first key is the cluster, the second key is the latent factor
         linked_TF = dict()
         # for each louvain cluster
         for c in range(len(self.filtered_links_dict.keys())):
             df = self.filtered_links_dict[str(c)]
             
             # for each latent factor
-            gene_TF_df = pd.DataFrame()
+            gene_TF_lf = dict()
             linked_TF_df = pd.DataFrame()
             for lf in latent_factors.keys():
                 lf_df = latent_factors[lf]
                 lf_genes = lf_df['names'].tolist()
+                # find the genes in the latent factor that are not TFs
                 lf_genes = [x for x in lf_genes if x not in human_TF[0].tolist()]
                 # find the edges of the latent factor that are also in the GRN
                 overlap_df = df[df['source'].isin(lf_genes) | df['target'].isin(lf_genes)]
-                overlap_df['latent_factor'] = lf
+                assert overlap_df['target'].isin(lf_genes).sum() == len(overlap_df), "not all target nodes are genes in SLIDE lfs."
+                
+                # add a column to count for the degree of the source node
+                # this is to get the information on what are the master TFs for this lf
+                degree = overlap_df['source'].value_counts()
+                overlap_df['source_degree'] = overlap_df['source'].map(degree)
+                overlap_df = overlap_df.sort_values(by=['source_degree'], ascending=False)
+                gene_TF_lf[lf] = overlap_df
 
                 # pull out the TF names that link to genes in the LF
                 linked_TF_list = list(set(overlap_df['source']).union(set(overlap_df['target'])))
                 linked_TF_list = [x for x in linked_TF_list if x in human_TF[0].tolist()]
                 temp_df = pd.DataFrame({'cluster':str(c), 'latent_factor': lf, 'linked_TF': linked_TF_list})
-                gene_TF_df = gene_TF_df.append(overlap_df)
                 linked_TF_df = linked_TF_df.append(temp_df)
             
-            gene_TF[str(c)] = gene_TF_df
+            gene_TF[str(c)] = gene_TF_lf
             linked_TF[str(c)] = linked_TF_df
         
         self.gene_TF_SLIDE = gene_TF
         self.linked_TF_SLIDE = linked_TF
+
+    

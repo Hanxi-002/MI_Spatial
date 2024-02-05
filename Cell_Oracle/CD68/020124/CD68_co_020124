@@ -1,0 +1,53 @@
+#%%
+import sys
+sys.path.append("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/COAnalyses")
+from adata_oracle import *
+from oracle_links import *
+import numpy as np
+import pandas as pd
+import dill
+import os
+import matplotlib.pyplot as plt
+import celloracle as co
+import scanpy as sc
+%matplotlib inline
+# %%
+############## load data
+print(os.getcwd())
+os.chdir('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/CD68/020124')
+
+
+adata_oracle = adata_oracle('CD68_norm.csv')
+print(adata_oracle.adata.X.shape)
+
+adata_oracle.qc_filter()
+print(adata_oracle.adata.X.shape)
+
+adata_oracle.add_raw_count('CD68.csv')
+
+
+############## add in the meta data cell type into the annData object
+# add the region status
+meta = pd.read_excel('/ix/djishnu/Hanxi/MI_Spatial/RawData/Final_Annotation_Dutta_sample_info.xlsx', index_col=0)
+celltype_df = meta[meta['SegmentLabel']=='CD 68']
+status = celltype_df['Status']
+status.index = celltype_df['DCCnames'] + ".dcc"
+assert status.index.isin(adata_oracle.norm_data.columns).sum() == adata_oracle.norm_data.shape[1], "length of meta data not match with data"
+
+status = status.sort_index()
+# make sure that celltype_df is in the same order as data
+assert sum(status.index == adata_oracle.norm_data.columns) == adata_oracle.norm_data.shape[1], "index of meta data not match with data"
+
+adata_oracle.adata.obs['cell_type'] = 'CD 68'
+adata_oracle.adata.obs['Status'] = status.values
+
+#%%
+adata_oracle.mean_centering()
+adata_oracle.pca()
+sc.pp.neighbors(adata_oracle.adata, n_neighbors=4, n_pcs=50)
+sc.tl.leiden(adata_oracle.adata)
+sc.tl.louvain(adata_oracle.adata)
+#adata_oracle.plot_dim_reduction(method = "umap", color = "leiden")
+sc.pl.umap(adata_oracle.adata, color=['leiden', 'louvain', 'Status'])
+
+# %
