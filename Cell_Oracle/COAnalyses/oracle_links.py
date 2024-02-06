@@ -104,6 +104,7 @@ class oracle_links:
                 where each dataframe is a latent factor.
         """
         degree_1_overlap = dict()
+        base_GRN = co.data.load_human_promoter_base_GRN()
         for c in range(len(self.filtered_links_dict.keys())):
             df = self.filtered_links_dict[str(c)]
 
@@ -113,7 +114,7 @@ class oracle_links:
             # get the overlap between cluster node names and human TFs
             cluster_TF = [x for x in cluster_TF if x in list(human_TF[0])]
             print(f"Cluster {str(c)} has {len(cluster_TF)} TFs.")
-            
+
             overlap_df = pd.DataFrame()
             for lf in latent_factors.keys():
                 lf_df = latent_factors[lf]
