@@ -96,15 +96,15 @@ class oracle_links:
         self.TF_degree_dict = TF_degree_dict
         self.filtered_links_dict = filtered_links_dict
     
-    def find_TF_overlap_SLIDE(self, latent_factors, human_TF):
+    def find_TF_overlap_SLIDE(self, latent_factors, oracle):
         """Pull out TFs discovered in SLIDE results. Store the result in a dict in \
         oracle_links.degree_1_overlap.
         Args:
             latent_factors (dict): a dictionary of dataframes, \
                 where each dataframe is a latent factor.
+            oracle: the oracle object from co package.
         """
         degree_1_overlap = dict()
-        base_GRN = co.data.load_human_promoter_base_GRN()
         for c in range(len(self.filtered_links_dict.keys())):
             df = self.filtered_links_dict[str(c)]
 
@@ -112,7 +112,8 @@ class oracle_links:
             cluster_TF = list(set(df['source']).union(set(df['target'])))
             print(f"Cluster {str(c)} has {len(cluster_TF)} nodes.")
             # get the overlap between cluster node names and human TFs
-            cluster_TF = [x for x in cluster_TF if x in list(human_TF[0])]
+            #cluster_TF = [x for x in cluster_TF if x in list(human_TF[0])]
+            cluster_TF = [x for x in cluster_TF if x in oracle.all_regulatory_genes_in_TFdict]
             print(f"Cluster {str(c)} has {len(cluster_TF)} TFs.")
 
             overlap_df = pd.DataFrame()
@@ -123,9 +124,9 @@ class oracle_links:
                 temp_df = pd.DataFrame({'cluster':str(c), 'latent_factor': lf, 'overlap': overlap})
                 overlap_df = overlap_df.append(temp_df)
             degree_1_overlap[str(c)] = overlap_df
-        self.degree_1_overlap = degree_1_overlap
+        self.overlap_TF_SLIDE = degree_1_overlap
 
-    def find_gene_TF_SLIDE(self, latent_factors, human_TF):
+    def find_gene_TF_SLIDE(self, latent_factors, oracle):
         """Find the genes in SLIDE latent factors that are connected to a TF in the context specific GRN.
             The resulting dictionary is saved in the object at self.gene_TF_SLIDE.
             The list of the linked TF is saved at self.linked_TF_SLIDE.
@@ -146,7 +147,8 @@ class oracle_links:
                 lf_df = latent_factors[lf]
                 lf_genes = lf_df['names'].tolist()
                 # find the genes in the latent factor that are not TFs
-                lf_genes = [x for x in lf_genes if x not in human_TF[0].tolist()]
+                #lf_genes = [x for x in lf_genes if x not in human_TF[0].tolist()]
+                lf_genes = [x for x in lf_genes if x not in oracle.all_regulatory_genes_in_TFdict]
                 # find the edges of the latent factor that are also in the GRN
                 overlap_df = df[df['source'].isin(lf_genes) | df['target'].isin(lf_genes)]
                 assert overlap_df['target'].isin(lf_genes).sum() == len(overlap_df), "not all target nodes are genes in SLIDE lfs."
@@ -160,14 +162,21 @@ class oracle_links:
 
                 # pull out the TF names that link to genes in the LF
                 linked_TF_list = list(set(overlap_df['source']).union(set(overlap_df['target'])))
-                linked_TF_list = [x for x in linked_TF_list if x in human_TF[0].tolist()]
+                #linked_TF_list = [x for x in linked_TF_list if x in human_TF[0].tolist()]
+                linked_TF_list = [x for x in linked_TF_list if x in oracle.all_regulatory_genes_in_TFdict]
                 temp_df = pd.DataFrame({'cluster':str(c), 'latent_factor': lf, 'linked_TF': linked_TF_list})
                 linked_TF_df = linked_TF_df.append(temp_df)
-            
+             
             gene_TF[str(c)] = gene_TF_lf
             linked_TF[str(c)] = linked_TF_df
         
         self.gene_TF_SLIDE = gene_TF
         self.linked_TF_SLIDE = linked_TF
 
-    
+    def fit_ridge_regression(self, oracle):
+        '''
+        Fit the ridge regression model to the cluster specific GRN.
+        '''
+        self.links.filtered_links = oracle_links.filtered_links_dict
+        oracle.get_cluster_specific_TFdict_from_Links(links_object = self.links)
+        oracle.fit_GRN_for_simulation(alpha=10, use_cluster_specific_TFdict=True)

@@ -3,6 +3,7 @@ import sys
 sys.path.append("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/COAnalyses")
 from adata_oracle import *
 from oracle_links import *
+from helper_funcs import *
 import numpy as np
 import pandas as pd
 import dill
@@ -11,7 +12,7 @@ import matplotlib.pyplot as plt
 import celloracle as co
 import scanpy as sc
 %matplotlib inline
-# %%
+# %% creating the andata object
 print(os.getcwd())
 os.chdir("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/CD68/020124")
 
@@ -51,16 +52,13 @@ adata_oracle.plot_dim_reduction(method = "umap", color = "Status")
 dill.dump(adata_oracle, open('adata_oracle_CD68_CO_020124.pkl', 'wb'))
 
 
+# #load the pickle file through dill
+# with open('adata_oracle_CD68_CO_020124.pkl', 'rb') as f:
+#     adata_oracle = dill.load(f)
 
+# adata_oracle.adata
 
-#load the pickle file through dill
-with open('adata_oracle_CD68_CO_020124.pkl', 'rb') as f:
-    adata_oracle = dill.load(f)
-
-adata_oracle.adata
-
-#%%
-
+#%% creating the oracle object and get context specific GRN
 oracle = co.Oracle()
 print("Metadata columns :", list(adata_oracle.adata.obs.columns))
 print("Dimensional reduction: ", list(adata_oracle.adata.obsm.keys()))
@@ -90,17 +88,24 @@ print(f"Auto-selected k is :{k}")
 oracle.knn_imputation(n_pca_dims=n_comps, k=k, balanced=True, b_sight=k*8,
                       b_maxl=k*4, n_jobs=4)
 
+
+##########################save both the adata and adata_oracle object###########
 #adata = co.load_hdf5('allcell_allcondition_adata')
 oracle.to_hdf5("CD68.celloracle.oracle")
 
+#adata_oracle = dill.load(open('adata_oracle_CD68_CO_020124.pkl', 'rb'))
+adata_oracle.oracle = oracle
+dill.dump(adata_oracle, open('adata_oracle_CD68_CO_020124.pkl', 'wb'))
 
-############## calculate GRN
+#%%
+############## calculate GRN ##############################
 links = oracle.get_links(cluster_name_for_GRN_unit="louvain", alpha=10,
                          verbose_level=10)
 
+# just like oracle, we save link object but also save it as part of the oracle_links
 links.to_hdf5(file_path="CD68.celloracle.links")
-#%%
 
+#perform link analysis
 oracle_links = oracle_links("CD68.celloracle.links")
 oracle_links.links.links_dict['0'].head()
 oracle_links.filter_pval()
@@ -118,37 +123,36 @@ oracle_links.get_top_links(percentile = 0.1)
 oracle_links.TF_degree_dict # the degree of each NODE in each cluster
 oracle_links.filtered_links_dict # the top links for each NODE in each cluster
 
-#%%
-def load_SLIDE_res(folder_path):
-    """Load SLIDE restulst as a dictionary.
-        Args:
-            folder_path (str): the path to the folder containing all SLIDE results.
-    """
-    latent_factors = {}  
-    for filename in os.listdir(folder_path):
-        if filename.endswith('.txt'): 
-            file_path = os.path.join(folder_path, filename)
-            df = pd.read_csv(file_path, delimiter='\t')
-            latent_factors[filename[0:-4]] = df
-    return latent_factors
-#%%
+#################find the overlap between SLIDE and oracle##############
+# load the oracle_link object from pkl file
+#oracle_links = dill.load(open('CD68_oracle_links.pkl', 'rb'))
+#oracle = co.load_hdf5("CD68.celloracle.oracle")
 
 latent_factors = load_SLIDE_res('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/CD68/121423/results/SLIDE_Results')
 latent_factors.keys()
 
-oracle_links.find_TF_overlap_SLIDE(latent_factors = latent_factors, human_TF = human_TF)
-for c in range(len(oracle_links.degree_1_overlap.keys())):
-    print(oracle_links.degree_1_overlap[str(c)])
+# the TFs that appear in the latent factors
+oracle_links.find_TF_overlap_SLIDE(latent_factors = latent_factors, oracle = adata_oracle.oracle)
+for c in range(len(oracle_links.overlap_TF_SLIDE.keys())):
+    print(oracle_links.overlap_TF_SLIDE[str(c)])
 
-oracle_links.find_gene_TF_SLIDE(latent_factors, human_TF)
+# the TFs that regulates the latent factors
+oracle_links.find_gene_TF_SLIDE(latent_factors, adata_oracle.oracle)
 oracle_links.gene_TF_SLIDE
 oracle_links.linked_TF_SLIDE
 
 dill.dump(oracle_links, open('CD68_oracle_links.pkl', 'wb'))
 
 
-# %% in silico perturbation'
-print(co.__version__)
+############################get the TFs as a list for perturbation##########################
+# function in helper_funcs.py
+overlap_TF_list = gene_dict_to_list(oracle_links.overlap_TF_SLIDE)
+print(overlap_TF_list)
+linked_TF_list = gene_dict_to_list(oracle_links.linked_TF_SLIDE)
+print(linked_TF_list)
+
+
+#%%
 #plt.rcParams["font.family"] = "arial"
 plt.rcParams["figure.figsize"] = [6,6]
 %config InlineBackend.figure_format = 'retina'
@@ -157,34 +161,10 @@ plt.rcParams["savefig.dpi"] = 600
 save_folder = "figures"
 os.makedirs(save_folder, exist_ok=True)
 
-oracle = co.load_hdf5("CD68.celloracle.oracle")
+goi = 'JUND'
+for goi in overlap_TF_list:
+    plot_gene_hist(adata_oracle.oracle.adata, goi, save_folder)
 
-oracle_links.links.filtered_links = oracle_links.filtered_links_dict
-oracle.get_cluster_specific_TFdict_from_Links(links_object = oracle_links.links)
-oracle.fit_GRN_for_simulation(alpha=10,
-                              use_cluster_specific_TFdict=True)
-
-
-
-#%%
-overlap_TF = []
-for df in oracle_links.degree_1_overlap.values():
-    overlap_TF.extend(df['overlap'].tolist())
-overlap_TF = list(set(overlap_TF))
-len(overlap_TF)
-#%%
-overlap_TF_toy = ['SIRT6',
- 'JUNB',
- 'JUND',
- 'ZNF680',
- 'MBD2',
- 'MAZ',
- 'CEBPD']
-
-for goi in overlap_TF_toy:
-    goi  = "JUNB"
-    sc.get.obs_df(oracle.adata, keys=goi, layer="imputed_count").hist()
-    plt.show()
     oracle.simulate_shift(perturb_condition={goi: 0.0},
                         n_propagation=3)
 
@@ -210,31 +190,32 @@ for goi in overlap_TF_toy:
     plt.show()
 
 # %%
-n_grid = 40
-oracle.calculate_p_mass(smooth=0.8, n_grid=n_grid, n_neighbors=50)
-oracle.suggest_mass_thresholds(n_suggestion=12)
+    n_grid = 40
+    oracle.calculate_p_mass(smooth=0.8, n_grid=n_grid, n_neighbors=50)
+    oracle.suggest_mass_thresholds(n_suggestion=12)
 
-min_mass = 0.14
-oracle.calculate_mass_filter(min_mass=min_mass, plot=True)
+    min_mass = 0.14
+    oracle.calculate_mass_filter(min_mass=min_mass, plot=True)
 
-fig, ax = plt.subplots(1, 2,  figsize=[13, 6])
-scale_simulation = 10
-# Show quiver plot
-oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax[0])
-ax[0].set_title(f"Simulated cell identity shift vector: {goi} KO")
+    fig, ax = plt.subplots(1, 2,  figsize=[13, 6])
+    scale_simulation = 10
+    # Show quiver plot
+    oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax[0])
+    ax[0].set_title(f"Simulated cell identity shift vector: {goi} KO")
 
-# Show quiver plot that was calculated with randomized graph.
-oracle.plot_simulation_flow_random_on_grid(scale=scale_simulation, ax=ax[1])
-ax[1].set_title(f"Randomized simulation vector")
+    # Show quiver plot that was calculated with randomized graph.
+    oracle.plot_simulation_flow_random_on_grid(scale=scale_simulation, ax=ax[1])
+    ax[1].set_title(f"Randomized simulation vector")
 
-plt.show()
+    plt.show()
 
-fig, ax = plt.subplots(figsize=[8, 8])
+    fig, ax = plt.subplots(figsize=[8, 8])
 
-oracle.plot_cluster_whole(ax=ax, s=10)
-oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax, show_background=False)
+    oracle.plot_cluster_whole(ax=ax, s=10)
+    oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax, show_background=False)
 # %%
 
 oracle.delta_embedding.shape
 oracle.delta_embedding_random
 adata_oracle.adata.obs
+#%%

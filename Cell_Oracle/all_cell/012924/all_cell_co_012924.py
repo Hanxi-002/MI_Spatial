@@ -319,5 +319,3 @@ ax[1].set_title(f"Randomized simulation vector")
 
 plt.show()
 
-#%%
-
