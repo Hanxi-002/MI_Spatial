@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import scanpy as sc
+import numpy as np 
 
 def load_SLIDE_res(folder_path):
     """Load SLIDE restulst as a dictionary.
@@ -27,3 +28,87 @@ def plot_gene_hist(adata, goi, save_folder):
     sc.get.obs_df(adata, keys=goi, layer="imputed_count").hist()
     plt.show()
     plt.savefig(f"{save_folder}/{goi}_hist.pdf")
+
+def calc_cell_identity_shifts (oracle, goi, save_folder, scale = 50, perturb_value = 0.0):
+    oracle.simulate_shift(perturb_condition={goi: perturb_value},
+                        n_propagation=3)
+
+    # Get transition probability
+    oracle.estimate_transition_prob(n_neighbors=50,
+                                    knn_random=True,
+                                    sampled_fraction=1)
+    # Calculate embedding
+    oracle.calculate_embedding_shift(sigma_corr=0.05)
+
+    fig, ax = plt.subplots(1, 2,  figsize=[13, 6])
+
+    scale = scale
+    # Show quiver plot
+    oracle.plot_quiver(scale=scale, ax=ax[0])
+    ax[0].set_title(f"Simulated cell identity shift vector: {goi} KO")
+    # Show quiver plot that was calculated with randomized graph.
+    oracle.plot_quiver_random(scale=scale, ax=ax[1])
+    ax[1].set_title(f"Randomized simulation vector")
+    plt.show()
+    plt.savefig(f"{save_folder}/{goi}_sim_shift.pdf")
+
+def get_optimal_min_mass(n_grid, oracle):
+    oracle.calculate_p_mass(smooth=0.8, n_grid=n_grid, n_neighbors=50)
+    oracle.suggest_mass_thresholds(n_suggestion=12)
+
+def calc_vector_fields(min_mass, goi, oracle, save_folder, scale_simulation = 10):
+    #min_mass = 0.14
+    oracle.calculate_mass_filter(min_mass=min_mass, plot=True)
+    fig, ax = plt.subplots(1, 2,  figsize=[13, 6])
+    plt.savefig(f"{save_folder}/{goi}_grid_points.pdf")
+    # Show quiver plot
+    oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax[0])
+    ax[0].set_title(f"Simulated cell identity shift vector: {goi} KO")
+
+    # Show quiver plot that was calculated with randomized graph.
+    oracle.plot_simulation_flow_random_on_grid(scale=scale_simulation, ax=ax[1])
+    ax[1].set_title(f"Randomized simulation vector")
+    plt.show()
+    plt.savefig(f"{save_folder}/{goi}_vector_field.pdf")
+
+def plot_vector_filed_on_cluster(oracle, goi, save_folder, scale_simulation=10):
+    fig, ax = plt.subplots(figsize=[8, 8])
+    oracle.plot_cluster_whole(ax=ax, s=10)
+    oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax, show_background=False)
+    ax.set_title(f"Vector filed on clusters: {goi} KO")
+    plt.savefig(f"{save_folder}/{goi}_vector_field_on_cluster.pdf")
+
+def calc_cluster_vector_diff(oracle, adata, goi, save_folder):
+    df_delta = pd.DataFrame(oracle.delta_embedding)
+    df_delta.index = adata.obs.index
+    df_delta_rand = pd.DataFrame(oracle.delta_embedding_random)
+    df_delta_rand.index = adata.obs.index
+
+    diff = []
+    method = 'louvain'
+    for j in np.unique(adata.obs[method].astype(int).values):
+        cluster_df = adata.obs[adata.obs[method] == str(j)]
+        
+        # get the rows in df_delta where the index is in cluster_df
+        cluster_df_delta = df_delta[df_delta.index.isin(cluster_df.index)]
+        cluster_df_delta_rand = df_delta_rand[df_delta_rand.index.isin(cluster_df.index)]
+
+        assert sum(cluster_df_delta.index == cluster_df.index) == cluster_df.shape[0], \
+            "index of cluster_df_delta not match with cluster_df"
+
+        # calculate the magnitude of the vectors
+        cluster_df_delta['magnitude'] = np.sqrt(cluster_df_delta[0]**2 + cluster_df_delta[1]**2)
+        cluster_df_delta_rand['magnitude'] = np.sqrt(cluster_df_delta_rand[0]**2 + cluster_df_delta_rand[1]**2)
+
+        # plot box plot the differences of the magnitudes
+        cluster_diff = cluster_df_delta['magnitude'] - cluster_df_delta_rand['magnitude']
+        diff.append(cluster_diff)
+
+    plt.boxplot(diff)
+    plt.title(f'{goi}_Vector_Magnitude_Difference')
+    plt.xlabel('Clusters')
+    plt.ylabel('Differences')
+    # Display the plot
+    plt.show()
+    plt.savefig(f"{save_folder}/{goi}_Vector_Magnitude_Difference.pdf")
+    

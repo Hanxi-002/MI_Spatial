@@ -177,6 +177,19 @@ class oracle_links:
         '''
         Fit the ridge regression model to the cluster specific GRN.
         '''
-        self.links.filtered_links = oracle_links.filtered_links_dict
+        self.links.filtered_links = self.filtered_links_dict
         oracle.get_cluster_specific_TFdict_from_Links(links_object = self.links)
         oracle.fit_GRN_for_simulation(alpha=10, use_cluster_specific_TFdict=True)
+    
+    def threshold_linked_TFs(self, thresh = 10):
+        '''
+        Threshold the linked TFs based on the source degree.
+        '''
+        TF_list = []
+        for c in self.gene_TF_SLIDE.keys():
+            for lf in self.gene_TF_SLIDE[c].keys():
+                df = self.gene_TF_SLIDE[c][lf]
+                TF = df[df['source_degree'] >= thresh]['source'].unique().tolist()
+                TF_list.extend(TF)
+        TF_list = list(set(TF_list))
+        return TF_list

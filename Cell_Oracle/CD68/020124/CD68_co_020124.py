@@ -98,7 +98,7 @@ adata_oracle.oracle = oracle
 dill.dump(adata_oracle, open('adata_oracle_CD68_CO_020124.pkl', 'wb'))
 
 #%%
-############## calculate GRN ##############################
+############################# calculate GRN ##############################
 links = oracle.get_links(cluster_name_for_GRN_unit="louvain", alpha=10,
                          verbose_level=10)
 
@@ -123,7 +123,7 @@ oracle_links.get_top_links(percentile = 0.1)
 oracle_links.TF_degree_dict # the degree of each NODE in each cluster
 oracle_links.filtered_links_dict # the top links for each NODE in each cluster
 
-#################find the overlap between SLIDE and oracle##############
+######################find the overlap between SLIDE and oracle######################
 # load the oracle_link object from pkl file
 #oracle_links = dill.load(open('CD68_oracle_links.pkl', 'rb'))
 #oracle = co.load_hdf5("CD68.celloracle.oracle")
@@ -141,18 +141,25 @@ oracle_links.find_gene_TF_SLIDE(latent_factors, adata_oracle.oracle)
 oracle_links.gene_TF_SLIDE
 oracle_links.linked_TF_SLIDE
 
-dill.dump(oracle_links, open('CD68_oracle_links.pkl', 'wb'))
+######################### perform ridge regression to calculate GRN ####################
+
+oracle_links.fit_ridge_regression(adata_oracle.oracle)
+#dill.dump(oracle_links, open('CD68_oracle_links.pkl', 'wb'))
+#dill.dump(adata_oracle, open('adata_oracle_CD68_CO_020124.pkl', 'wb'))
 
 
 ############################get the TFs as a list for perturbation##########################
 # function in helper_funcs.py
 overlap_TF_list = gene_dict_to_list(oracle_links.overlap_TF_SLIDE)
 print(overlap_TF_list)
-linked_TF_list = gene_dict_to_list(oracle_links.linked_TF_SLIDE)
+linked_TF_list = threshold_linked_TFs(oracle_links, thresh = 10)
 print(linked_TF_list)
+len(linked_TF_list)
+#linked_TF_list = TF_list
 
 
-#%%
+#%% in silicco perturbation
+######################### single TF perturbation ####################
 #plt.rcParams["font.family"] = "arial"
 plt.rcParams["figure.figsize"] = [6,6]
 %config InlineBackend.figure_format = 'retina'
@@ -161,61 +168,21 @@ plt.rcParams["savefig.dpi"] = 600
 save_folder = "figures"
 os.makedirs(save_folder, exist_ok=True)
 
-goi = 'JUND'
-for goi in overlap_TF_list:
+#goi = 'JUND'
+
+for goi in linked_TF_list:
+    print(goi)
     plot_gene_hist(adata_oracle.oracle.adata, goi, save_folder)
 
-    oracle.simulate_shift(perturb_condition={goi: 0.0},
-                        n_propagation=3)
+    calc_cell_identity_shifts(oracle=adata_oracle.oracle, goi=goi, save_folder = save_folder, \
+                              scale = 50, perturb_value = 0.0)
 
-    # Get transition probability
-    oracle.estimate_transition_prob(n_neighbors=50,
-                                    knn_random=True,
-                                    sampled_fraction=1)
+    get_optimal_min_mass(n_grid=40, oracle=adata_oracle.oracle)
 
-    # Calculate embedding
-    oracle.calculate_embedding_shift(sigma_corr=0.05)
+    calc_vector_fields(min_mass = 0.14, goi = goi, oracle=adata_oracle.oracle, \
+                       save_folder = save_folder, scale_simulation = 10)
 
-    fig, ax = plt.subplots(1, 2,  figsize=[13, 6])
+    plot_vector_filed_on_cluster(oracle=adata_oracle.oracle, goi = goi, save_folder = save_folder, scale_simulation=10)    
 
-    scale = 50
-    # Show quiver plot
-    oracle.plot_quiver(scale=scale, ax=ax[0])
-    ax[0].set_title(f"Simulated cell identity shift vector: {goi} KO")
+    calc_cluster_vector_diff(oracle=adata_oracle.oracle, adata=adata_oracle.oracle.adata, goi=goi, save_folder=save_folder)
 
-    # Show quiver plot that was calculated with randomized graph.
-    oracle.plot_quiver_random(scale=scale, ax=ax[1])
-    ax[1].set_title(f"Randomized simulation vector")
-
-    plt.show()
-
-# %%
-    n_grid = 40
-    oracle.calculate_p_mass(smooth=0.8, n_grid=n_grid, n_neighbors=50)
-    oracle.suggest_mass_thresholds(n_suggestion=12)
-
-    min_mass = 0.14
-    oracle.calculate_mass_filter(min_mass=min_mass, plot=True)
-
-    fig, ax = plt.subplots(1, 2,  figsize=[13, 6])
-    scale_simulation = 10
-    # Show quiver plot
-    oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax[0])
-    ax[0].set_title(f"Simulated cell identity shift vector: {goi} KO")
-
-    # Show quiver plot that was calculated with randomized graph.
-    oracle.plot_simulation_flow_random_on_grid(scale=scale_simulation, ax=ax[1])
-    ax[1].set_title(f"Randomized simulation vector")
-
-    plt.show()
-
-    fig, ax = plt.subplots(figsize=[8, 8])
-
-    oracle.plot_cluster_whole(ax=ax, s=10)
-    oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax, show_background=False)
-# %%
-
-oracle.delta_embedding.shape
-oracle.delta_embedding_random
-adata_oracle.adata.obs
-#%%
