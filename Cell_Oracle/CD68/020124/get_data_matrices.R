@@ -5,5 +5,5 @@ expr <- as.matrix(subset_data@assayData$exprs)
 norm <- as.matrix(subset_data@assayData$q_norm)
 
 write.csv(expr, "/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/CD68/020124/CD68.csv")
-write.csv(expr, "/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/CD68/020124/CD68_norm.csv")
+write.csv(norm, "/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/CD68/020124/CD68_norm.csv")
 

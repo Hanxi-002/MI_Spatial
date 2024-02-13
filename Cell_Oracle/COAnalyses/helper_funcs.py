@@ -26,7 +26,6 @@ def gene_dict_to_list(gene_dict):
 
 def plot_gene_hist(adata, goi, save_folder):
     sc.get.obs_df(adata, keys=goi, layer="imputed_count").hist()
-    plt.show()
     plt.savefig(f"{save_folder}/{goi}_hist.pdf")
 
 def calc_cell_identity_shifts (oracle, goi, save_folder, scale = 50, perturb_value = 0.0):
@@ -49,8 +48,8 @@ def calc_cell_identity_shifts (oracle, goi, save_folder, scale = 50, perturb_val
     # Show quiver plot that was calculated with randomized graph.
     oracle.plot_quiver_random(scale=scale, ax=ax[1])
     ax[1].set_title(f"Randomized simulation vector")
-    plt.show()
     plt.savefig(f"{save_folder}/{goi}_sim_shift.pdf")
+    plt.show()
 
 def get_optimal_min_mass(n_grid, oracle):
     oracle.calculate_p_mass(smooth=0.8, n_grid=n_grid, n_neighbors=50)
@@ -68,8 +67,8 @@ def calc_vector_fields(min_mass, goi, oracle, save_folder, scale_simulation = 10
     # Show quiver plot that was calculated with randomized graph.
     oracle.plot_simulation_flow_random_on_grid(scale=scale_simulation, ax=ax[1])
     ax[1].set_title(f"Randomized simulation vector")
-    plt.show()
     plt.savefig(f"{save_folder}/{goi}_vector_field.pdf")
+    plt.show()
 
 def plot_vector_filed_on_cluster(oracle, goi, save_folder, scale_simulation=10):
     fig, ax = plt.subplots(figsize=[8, 8])
@@ -108,7 +107,7 @@ def calc_cluster_vector_diff(oracle, adata, goi, save_folder):
     plt.title(f'{goi}_Vector_Magnitude_Difference')
     plt.xlabel('Clusters')
     plt.ylabel('Differences')
+    plt.savefig(f"{save_folder}/{goi}_Vector_Magnitude_Difference.pdf")
     # Display the plot
     plt.show()
-    plt.savefig(f"{save_folder}/{goi}_Vector_Magnitude_Difference.pdf")
     
