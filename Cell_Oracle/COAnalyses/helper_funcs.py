@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 import scanpy as sc
 import numpy as np 
 
@@ -59,7 +60,7 @@ def calc_vector_fields(min_mass, goi, oracle, save_folder, scale_simulation = 10
     #min_mass = 0.14
     oracle.calculate_mass_filter(min_mass=min_mass, plot=True)
     fig, ax = plt.subplots(1, 2,  figsize=[13, 6])
-    plt.savefig(f"{save_folder}/{goi}_grid_points.pdf")
+    #plt.savefig(f"{save_folder}/{goi}_grid_points.pdf")
     # Show quiver plot
     oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax[0])
     ax[0].set_title(f"Simulated cell identity shift vector: {goi} KO")
@@ -76,15 +77,19 @@ def plot_vector_filed_on_cluster(oracle, goi, save_folder, scale_simulation=10):
     oracle.plot_simulation_flow_on_grid(scale=scale_simulation, ax=ax, show_background=False)
     ax.set_title(f"Vector filed on clusters: {goi} KO")
     plt.savefig(f"{save_folder}/{goi}_vector_field_on_cluster.pdf")
+    plt.show()
 
-def calc_cluster_vector_diff(oracle, adata, goi, save_folder):
+def calc_cluster_vector_diff(oracle, adata, goi, save_folder, method):
+    # change a flag for dot plot
+    # add the method
+    # try out the absolute difference
     df_delta = pd.DataFrame(oracle.delta_embedding)
     df_delta.index = adata.obs.index
     df_delta_rand = pd.DataFrame(oracle.delta_embedding_random)
     df_delta_rand.index = adata.obs.index
 
-    diff = []
-    method = 'louvain'
+    diff = pd.DataFrame()
+    method = method
     for j in np.unique(adata.obs[method].astype(int).values):
         cluster_df = adata.obs[adata.obs[method] == str(j)]
         
@@ -100,14 +105,24 @@ def calc_cluster_vector_diff(oracle, adata, goi, save_folder):
         cluster_df_delta_rand['magnitude'] = np.sqrt(cluster_df_delta_rand[0]**2 + cluster_df_delta_rand[1]**2)
 
         # plot box plot the differences of the magnitudes
-        cluster_diff = cluster_df_delta['magnitude'] - cluster_df_delta_rand['magnitude']
-        diff.append(cluster_diff)
+        cluster_diff = abs(cluster_df_delta['magnitude'] - cluster_df_delta_rand['magnitude'])
+        cluster_diff = pd.DataFrame(cluster_diff)
+        cluster_diff['cluster_label'] = j
+        #diff.append(cluster_diff)
+        #add cluster_diff to diff
+        diff = pd.concat([diff, cluster_diff])
 
-    plt.boxplot(diff)
-    plt.title(f'{goi}_Vector_Magnitude_Difference')
+    # plot the dot plot with cluster_label as x and magnitude as y
+    sns.stripplot(x='cluster_label', y='magnitude', data=diff, jitter=0.2, size=5, linewidth=1, edgecolor='gray')
+    sns.boxplot(x='cluster_label', y='magnitude', data=diff, whis=[5, 95], showcaps=True, boxprops={'facecolor':'None'}, showfliers=False, whiskerprops={'linewidth':2}, medianprops={'color':'red'})
+
+    #plt.scatter(range(len(diff)), diff)
     plt.xlabel('Clusters')
     plt.ylabel('Differences')
     plt.savefig(f"{save_folder}/{goi}_Vector_Magnitude_Difference.pdf")
     # Display the plot
     plt.show()
+
+    # save diff to csv
+    diff.to_csv(f"{save_folder}/{goi}_Vector_Magnitude_Difference.csv")
     

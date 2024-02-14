@@ -12,24 +12,21 @@ import matplotlib.pyplot as plt
 import celloracle as co
 import scanpy as sc
 %matplotlib inline
-# %% creating the andata object
-##############################################
-         #creating the andata object
-##############################################
+#%%
 
 print(os.getcwd())
-os.chdir("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/CD68/020124")
+os.chdir("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/Active_Fibro/021324/")
 
-adata_oracle = adata_oracle('CD68_norm.csv')
+adata_oracle = adata_oracle('active_fibro_norm.csv')
 adata_oracle.norm_data.shape
 adata_oracle.adata.X.shape
 adata_oracle.qc_filter()
 adata_oracle.adata.X.shape
-adata_oracle.add_raw_count('CD68.csv')
+adata_oracle.add_raw_count('active_fibro.csv')
 
 
 meta = pd.read_excel('/ix/djishnu/Hanxi/MI_Spatial/RawData/Final_Annotation_Dutta_sample_info.xlsx', index_col=0)
-meta = meta[meta['CD 68'] == True]
+meta = meta[meta['active fibroblast'] == True]
 celltype_df = meta[['DCCnames', 'Status']]
 celltype_df.index = meta['DCCnames'] + ".dcc"
 
@@ -38,41 +35,19 @@ celltype_df = celltype_df.sort_index()
 # make sure that celltype_df is in the same order as data
 assert sum(celltype_df.index == adata_oracle.adata.obs.index) == adata_oracle.norm_data.shape[1], "index of meta data not match with data"
 
-adata_oracle.adata.obs['cell_type'] = 'CD 68'
+adata_oracle.adata.obs['cell_type'] = 'active fibroblast'
 adata_oracle.adata.obs['Status'] = celltype_df['Status']
 
 adata_oracle.mean_centering()
 adata_oracle.pca()
-adata_oracle.umap()
 
-sc.pp.neighbors(adata_oracle.adata, n_neighbors=5, n_pcs=50)
+sc.pp.neighbors(adata_oracle.adata, n_neighbors=3, n_pcs=50)
+adata_oracle.umap()
 sc.tl.leiden(adata_oracle.adata)
 sc.tl.louvain(adata_oracle.adata)
 
-sc.pl.umap(adata_oracle.adata, color=['leiden', 'louvain', 'Status'], save = 'CD68_umap.pdf')
-
-adata_oracle.plot_dim_reduction(method = "umap", color = "louvain")
-adata_oracle.plot_dim_reduction(method = "umap", color = "Status")
-
-#dill.dump(adata_oracle, open('adata_oracle_CD68_CO_020124.pkl', 'wb'))
-
-
-# #load the pickle file through dill
-# with open('adata_oracle_CD68_CO_020124.pkl', 'rb') as f:
-#     adata_oracle = dill.load(f)
-
+sc.pl.umap(adata_oracle.adata, color=['leiden', 'louvain', 'Status'], save = 'active_fibroblast_umap.pdf')
 #%%
-# adata_oracle = dill.load(open('adata_oracle_CD68_CO_020124.pkl', 'rb'))
-# sc.pl.umap(adata_oracle.adata, color=['leiden', 'louvain', 'Status'])
-
-# dist_label = pd.read_csv('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/CD68/020124/distance_label.csv', index_col=0)
-# dist_label.index.isin(adata_oracle.adata.obs.index)
-
-# adata_oracle.adata.obs
-# adata_oracle.adata.obs['dist_label'] = dist_label.iloc[:, 0]
-
-# sc.pl.umap(adata_oracle.adata, color=['Status', 'dist_label'], save = 'CD68_status.pdf')
-# Fill NaN values in the 'names' column with the scalar value 2
 #%% creating the oracle object and get context specific GRN
 ##############################################
          #creating the oracle object
@@ -83,7 +58,7 @@ print("Dimensional reduction: ", list(adata_oracle.adata.obsm.keys()))
 adata_oracle.adata.X = adata_oracle.adata.layers["raw_count"].copy()
 
 oracle.import_anndata_as_raw_count(adata=adata_oracle.adata,
-                                   cluster_column_name='louvain',
+                                   cluster_column_name='leiden',
                                    embedding_name='X_umap')
 
 base_GRN = co.data.load_human_promoter_base_GRN()
@@ -109,47 +84,37 @@ oracle.knn_imputation(n_pca_dims=n_comps, k=k, balanced=True, b_sight=k*8,
 
 ##########################save both the adata and adata_oracle object###########
 #adata = co.load_hdf5('allcell_allcondition_adata')
-oracle.to_hdf5("CD68.celloracle.oracle")
-
-#adata_oracle = dill.load(open('adata_oracle_CD68_CO_020124.pkl', 'rb'))
+oracle.to_hdf5("active_fibroblast.celloracle.oracle")
 adata_oracle.oracle = oracle
-dill.dump(adata_oracle, open('adata_oracle_CD68_CO_020124.pkl', 'wb'))
-
+dill.dump(adata_oracle, open('adata_oracle_active_fibroblast_CO_021324.pkl', 'wb'))
 #%%
-##############################################
+######################################
          # calculate GRN
 ##############################################
-links = oracle.get_links(cluster_name_for_GRN_unit="louvain", alpha=10,
+links = oracle.get_links(cluster_name_for_GRN_unit="leiden", alpha=10,
                          verbose_level=10)
 
 # just like oracle, we save link object but also save it as part of the oracle_links
-links.to_hdf5(file_path="CD68.celloracle.links")
-
+links.to_hdf5(file_path="active_fibroblast.celloracle.links")
 #%%
-#perform link analysis
-oracle_links = oracle_links("CD68.celloracle.links")
+adata_oracle = dill.load(open('adata_oracle_active_fibroblast_CO_021324.pkl', 'rb'))
+links = co.load_hdf5("active_fibroblast.celloracle.links")
+
+oracle_links = oracle_links("active_fibroblast.celloracle.links")
 oracle_links.links.links_dict['0'].head()
 oracle_links.filter_pval()
 oracle_links.calc_weighted_logp()
 oracle_links.links.links_dict['0'].head()
 
-# load the human TF list
-# use pandas to read a txt file where each row contains one gene name
 base_GRN = co.data.load_human_promoter_base_GRN()
-#human_TF = pd.read_csv('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/allTFs_hg38_Scenic.txt', header=None)
-#oracle_links.filter_human_TF(human_TF=human_TF)
 
-#this might take a few minutes
 oracle_links.get_top_links(percentile = 0.1)
 oracle_links.TF_degree_dict # the degree of each NODE in each cluster
 oracle_links.filtered_links_dict # the top links for each NODE in each cluster
 
-######################find the overlap between SLIDE and oracle######################
-# load the oracle_link object from pkl file
-#oracle_links = dill.load(open('CD68_oracle_links.pkl', 'rb'))
-#oracle = co.load_hdf5("CD68.celloracle.oracle")
 
-latent_factors = load_SLIDE_res('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/CD68/121423/results/SLIDE_Results')
+######################find the overlap between SLIDE and oracle######################
+latent_factors = load_SLIDE_res('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/ActiveFibro/121223/results/SLIDE_Results/')
 latent_factors.keys()
 
 # the TFs that appear in the latent factors
@@ -166,9 +131,11 @@ oracle_links.linked_TF_SLIDE
 ######################### perform ridge regression to calculate GRN ####################
 
 oracle_links.fit_ridge_regression(adata_oracle.oracle)
-#dill.dump(oracle_links, open('CD68_oracle_links.pkl', 'wb'))
-#dill.dump(adata_oracle, open('adata_oracle_CD68_CO_020124.pkl', 'wb'))
+#dill.dump(oracle_links, open('active_fibroblast_oracle_links_co_020124.pkl', 'wb'))
+#dill.dump(adata_oracle, open('active_fibroblast_adata_oracle_co_020124.pkl', 'wb'))
 
+#oracle_links = dill.load(open('active_fibroblast_oracle_links_co_020124.pkl', 'rb'))
+#adata_oracle = dill.load(open('active_fibroblast_adata_oracle_co_020124.pkl', 'rb'))
 
 ############################get the TFs as a list for perturbation##########################
 # the gene lists are not save in the pkl file
@@ -178,8 +145,6 @@ print(overlap_TF_list)
 linked_TF_list = oracle_links.threshold_linked_TFs(thresh = 8)
 print(linked_TF_list)
 len(linked_TF_list)
-#linked_TF_list = TF_list
-
 
 #%% in silicco perturbation
 ######################### single TF perturbation ####################
@@ -188,12 +153,12 @@ plt.rcParams["figure.figsize"] = [6,6]
 %config InlineBackend.figure_format = 'retina'
 plt.rcParams["savefig.dpi"] = 600
 
-save_folder = "overlap_figures"
+save_folder = "linked_figures"
 os.makedirs(save_folder, exist_ok=True)
 
 #%%
 # run one goi to check the parameter settings
-for goi in overlap_TF_list:
+for goi in linked_TF_list:
     print(goi)
     plot_gene_hist(adata_oracle.oracle.adata, goi, save_folder)
 
@@ -202,8 +167,8 @@ for goi in overlap_TF_list:
 
     get_optimal_min_mass(n_grid=40, oracle=adata_oracle.oracle)
 
-    calc_vector_fields(min_mass = 0.13, goi = goi, oracle=adata_oracle.oracle, \
-                       save_folder = save_folder, scale_simulation = 15)
+    calc_vector_fields(min_mass = 0.14, goi = goi, oracle=adata_oracle.oracle, \
+                       save_folder = save_folder, scale_simulation = 10)
 
     plot_vector_filed_on_cluster(oracle=adata_oracle.oracle, goi = goi, save_folder = save_folder, scale_simulation=10)    
 
