@@ -11,6 +11,7 @@
 *.png
 *.dcc
 *.h5ad
+*.h5
 *.celloracle.links
 *.celloracle.oracle
 *.pkl
