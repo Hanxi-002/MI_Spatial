@@ -208,5 +208,5 @@ for goi in overlap_TF_list:
     plot_vector_filed_on_cluster(oracle=adata_oracle.oracle, goi = goi, save_folder = save_folder, scale_simulation=10)    
 
     calc_cluster_vector_diff(oracle=adata_oracle.oracle, adata=adata_oracle.oracle.adata, goi=goi,\
-                              save_folder=save_folder, method = 'leiden')
+                              save_folder=save_folder, method = 'louvain')
 

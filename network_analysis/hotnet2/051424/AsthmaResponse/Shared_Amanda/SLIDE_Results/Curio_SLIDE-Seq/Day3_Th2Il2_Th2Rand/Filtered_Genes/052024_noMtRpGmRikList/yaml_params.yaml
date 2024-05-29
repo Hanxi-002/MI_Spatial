@@ -1,0 +1,16 @@
+x_path: Data_noMtRpGmRikList/x.csv
+y_path: Data_noMtRpGmRikList/y.csv
+out_path: SLIDE_Output/0.01_1_out/
+delta: 0.01
+lambda: 1
+spec: 0.1
+y_factor: yes
+y_levels:
+- 0
+- 1
+eval_type: auc
+SLIDE_iter: 500
+SLIDE_top_feats: 10
+sampleCV_iter: 500
+sampleCV_K: 8
+do_interacts: yes
