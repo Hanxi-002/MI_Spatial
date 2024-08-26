@@ -32,9 +32,9 @@ m_thresh = 3
 ###################################################
 #%% ################################################
 #run the functions for CD68
-# parent_directory = 'CD68_hotnet_out/homosapiens_binary_co_complex_feb2023-cd_68'
-# filtered_edges = main(parent_directory, p_thresh, m_thresh)
-# filtered_edges.to_csv('CD68_hotnet_out/filtered_edges.txt', sep = '\t', index = False)
+parent_directory = 'CD68_hotnet_out/homosapiens_binary_co_complex_feb2023-cd_68_control'
+filtered_edges = main(parent_directory, p_thresh, m_thresh)
+filtered_edges.to_csv('CD68_hotnet_out/filtered_edges.txt', sep = '\t', index = False)
 ###################################################
 
 #%% ################################################
@@ -52,3 +52,9 @@ filtered_edges = main(parent_directory, p_thresh, m_thresh)
 filtered_edges.to_csv('RF_hotnet_out/filtered_edges.txt', sep = '\t', index = False)
 ###################################################
 
+#%% ################################################
+#run the functions for CD68 close to AF
+parent_directory = 'CD68_close_hotnet_out/homosapiens_binary_co_complex_feb2023-cd_68_close'
+filtered_edges = main(parent_directory, p_thresh, m_thresh)
+filtered_edges.to_csv('CD68_hotnet_out/filtered_edges.txt', sep = '\t', index = False)
+###################################################

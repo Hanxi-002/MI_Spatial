@@ -39,8 +39,8 @@ class adata_oracle:
         sc.tl.pca(self.adata, n_comps = n_comps, svd_solver='arpack')
         sc.pl.pca(self.adata)
     
-    def umap(self):
-        sc.tl.umap(self.adata)
+    def umap(self, min_dist = 0.5):
+        sc.tl.umap(self.adata, min_dist = min_dist)
     
     def tsne(self):
         sc.tl.tsne(self.adata)

@@ -16,5 +16,5 @@
 * CD68(AF; RF)_hotnet_out: folders containing output of the hotnet2 run. 
 
 ## results:
-* AF control runs do not have any significant modules (p-value below 0.1).
-* 
+* AF control hotnet2 analysis do not have any significant modules (p-value below 0.1).
+* CD68 control hotnet2 analysis do not have any significant modules (p-value below 0.1).

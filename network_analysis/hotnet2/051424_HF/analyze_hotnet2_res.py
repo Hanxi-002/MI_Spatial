@@ -1,5 +1,5 @@
-"""Analyzing the hotnet2 results for the MI_Spatial project
-   env: BasePy
+"""Analyzing the hotnet2 results for the MI_Spatial project 051424_HF
+   env: MultiPerturb
 """
 import pandas as pd
 import os
@@ -46,4 +46,19 @@ filtered_edges.to_csv('AF_hotnet_out/filtered_edges.txt', sep = '\t', index = Fa
 parent_directory = 'RF_hotnet_out/homosapiens_binary_co_complex_feb2023-resting_fibroblast'
 filtered_edges = main(parent_directory, p_thresh, m_thresh)
 filtered_edges.to_csv('RF_hotnet_out/filtered_edges.txt', sep = '\t', index = False)
+###################################################
+
+#%% ################################################
+#run the functions for CD68 close to AF
+parent_directory = 'CD68_close_hotnet_out/homosapiens_binary_co_complex_feb2023-cd_68_close'
+filtered_edges = main(parent_directory, p_thresh, m_thresh)
+filtered_edges.to_csv('CD68_close_hotnet_out/filtered_edges.txt', sep = '\t', index = False)
+###################################################
+
+#%% ################################################
+#run the functions for CD68 far away from AF
+# no significant modules
+parent_directory = 'CD68_far_hotnet_out/homosapiens_binary_co_complex_feb2023-cd_68_far'
+filtered_edges = main(parent_directory, p_thresh, m_thresh)
+filtered_edges.to_csv('CD68_far_hotnet_out/filtered_edges.txt', sep = '\t', index = False)
 ###################################################

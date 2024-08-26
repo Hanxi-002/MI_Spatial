@@ -26,6 +26,8 @@ del latent_factors['gene_list_Z131']
 del latent_factors['gene_list_Z45']
 
 oracle_links.find_TF_overlap_SLIDE(latent_factors = latent_factors, oracle = adata_oracle.oracle)
+
+#%%
 for c in range(len(oracle_links.overlap_TF_SLIDE.keys())):
     print(oracle_links.overlap_TF_SLIDE[str(c)])
 
@@ -49,7 +51,7 @@ plt.rcParams["figure.figsize"] = [6,6]
 %config InlineBackend.figure_format = 'retina'
 plt.rcParams["savefig.dpi"] = 600
 
-save_folder = "linked_figures"
+save_folder = "toy_figures"
 os.makedirs(save_folder, exist_ok=True)
 
 #%%
@@ -70,3 +72,10 @@ for goi in linked_TF_list:
 
     calc_cluster_vector_diff(oracle=adata_oracle.oracle, adata=adata_oracle.oracle.adata, goi=goi,\
                               save_folder=save_folder, method = 'louvain')
+
+
+
+#%%
+prob_mat = adata_oracle.oracle.transition_prob
+prob_mat.shape
+prob_mat.sum(axis = 0)

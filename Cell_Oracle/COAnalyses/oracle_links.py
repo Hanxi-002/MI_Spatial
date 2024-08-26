@@ -122,7 +122,8 @@ class oracle_links:
                 lf_TF = list(lf_df['names'])
                 overlap = list(set(cluster_TF).intersection(set(lf_TF)))
                 temp_df = pd.DataFrame({'cluster':str(c), 'latent_factor': lf, 'overlap': overlap})
-                overlap_df = overlap_df.append(temp_df)
+                #overlap_df = overlap_df.append(temp_df)
+                overlap_df = pd.concat([overlap_df, temp_df])
             degree_1_overlap[str(c)] = overlap_df
         self.overlap_TF_SLIDE = degree_1_overlap
 
@@ -165,7 +166,8 @@ class oracle_links:
                 #linked_TF_list = [x for x in linked_TF_list if x in human_TF[0].tolist()]
                 linked_TF_list = [x for x in linked_TF_list if x in oracle.all_regulatory_genes_in_TFdict]
                 temp_df = pd.DataFrame({'cluster':str(c), 'latent_factor': lf, 'linked_TF': linked_TF_list})
-                linked_TF_df = linked_TF_df.append(temp_df)
+                #linked_TF_df = linked_TF_df.append(temp_df)
+                linked_TF_df = pd.concat([linked_TF_df, temp_df])
              
             gene_TF[str(c)] = gene_TF_lf
             linked_TF[str(c)] = linked_TF_df
