@@ -13,15 +13,15 @@ import celloracle as co
 #%%
 ############## load data
 print(os.getcwd())
-os.chdir("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/all_cell/012923/")
+os.chdir("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/all_cell/012924/")
 
-adata_oracle = ao.adata_oracle('all_cell_norm.csv')
+adata_oracle = adata_oracle('all_cell_norm.csv')
 adata_oracle.qc_filter()
 adata_oracle.add_raw_count('all_cell.csv')
 
 
 ############## add in the meta data cell type into the annData object
-meta = pd.read_excel('../RawData/Final_Annotation_Dutta_sample_info.xlsx', index_col=0)
+meta = pd.read_excel('/ix/djishnu/Hanxi/MI_Spatial/RawData/Final_Annotation_Dutta_sample_info.xlsx', index_col=0)
 celltype_df = meta[['SegmentLabel', 'Status']]
 celltype_df.index = meta['DCCnames'] + ".dcc"
 assert celltype_df.index.isin(adata_oracle.norm_data.columns).sum() == adata_oracle.norm_data.shape[1], "length of meta data not match with data"
@@ -40,8 +40,18 @@ adata_oracle.louvain()
 adata_oracle.umap()
 adata_oracle.plot_dim_reduction(method = "umap", color = "louvain")
 adata_oracle.plot_dim_reduction(method = "umap", color = "Status")
+# save plot_dim_reduction to pdf
+plt.savefig('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/all_cell/012924/all_cell_umap.pdf', bbox_inches='tight', dpi=300)
+dill.dump(adata_oracle.adata, open('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/all_cell/012924/allcell_adata_umap_coords.pkl', 'wb'))
 
+fig = sc.pl.umap(adata_oracle.adata, color='Status', show=False)
+plt.savefig('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/all_cell/012924/all_cell_umap.pdf', bbox_inches='tight', dpi=300)
+plt.show()
 
+umap_coords = pd.DataFrame(adata_oracle.adata.obsm['X_umap'])
+umap_coords.columns = ['UMAP1', 'UMAP2']
+umap_coords.index = adata_oracle.adata.obs.index
+umap_coords.to_csv('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/all_cell/012924/allcell_umap_coords.csv')
 ############## save the adata object
 #adata_oracle.save_adata('all_cell_adata.h5ad')
 #adata = co.load_hdf5('all_cell_adata.h5ad')

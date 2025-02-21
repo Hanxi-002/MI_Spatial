@@ -30,8 +30,6 @@ len(pickles)
 
 save_folder = directory_path
 transition_count_dict = calc_all_transition_counts(pickles, save_folder, k = 1)
-
-
 #%%
 '''
 linked_TF (relaxed threshold but includes the original linked_TF),

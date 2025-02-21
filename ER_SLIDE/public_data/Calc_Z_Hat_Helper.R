@@ -1,0 +1,318 @@
+library(Seurat)
+library(ggplot2)
+library(SLIDE)
+
+####################################################################################################################################
+# Observe the sign order of the latent factor in the original SLIDE run
+find_LF_sign <- function(y_path, z_path, z_score_column, custom_labels = NULL){
+  # plot the LF of interest's z score with the original y. 
+  y <- read.csv(y_path, row.names = 1)
+  SLIDE_z <- read.csv(z_path, row.names = 1)
+  z_column_df <- as.data.frame(SLIDE_z[, z_score_column])
+  names(z_column_df)[1] = 'score'
+  row.names(z_column_df) <- row.names(SLIDE_z)
+  if (sum(row.names(y) != row.names(z_column_df)) != 0 ) {warning("The row order of y and z is different. ")}
+  z_column_df$condition = as.factor(y[ , 1])
+  
+  # Convert condition to factor first
+  p <- ggplot(z_column_df, aes(x = condition, y = score)) +
+    geom_boxplot() +
+    theme_minimal() +
+    theme(panel.grid = element_blank(),
+          axis.line = element_line(color = "black"),
+          legend.key.size = unit(1, "cm"))+
+    labs(title = paste0("Z", z_score_column, " in GeoMx"),
+         x = "Condition",
+         y = "Score")
+  
+  if(!is.null(custom_labels))  {
+    p <- p + scale_x_discrete(labels = custom_labels)
+  }
+  p
+}
+
+
+####################################################################################################################################
+# find new Z
+
+# Function to preprocess scRNA-seq data and ER results
+preprocess_data <- function(x, er_results_path) {
+  
+  er_res <- readRDS(er_results_path)
+  
+  intersecting_cols <- intersect(colnames(x), row.names(er_res$A))
+  x_intersected <- x[, intersecting_cols, drop = FALSE]
+  
+  missing_elements <- row.names(er_res$A)[!(row.names(er_res$A) %in% colnames(x))]
+  missing_zeros <- matrix(0, 
+                          nrow = nrow(x), 
+                          ncol = length(missing_elements), 
+                          dimnames = list(NULL, missing_elements))
+  
+  x_complete <- cbind(x_intersected, missing_zeros)
+  
+  return(list(
+    x_complete = x_complete,
+    er_res = er_res
+  ))
+}
+
+
+extract_z_scores <- function(preprocessed_data, z_score_column) {
+  # construct the new z for the new dataset
+  z_hat <- predZ(preprocessed_data$x_complete, preprocessed_data$er_res)
+  
+  # only look at the LF we are interested in
+  z_hat_99 <- as.data.frame(z_hat[, z_score_column])
+  colnames(z_hat_99) <- "score"
+  
+  # subset the seurat object
+  z_hat_99_seurat <- subset(x = preprocessed_data$seurat_obj, 
+                            cells = rownames(z_hat_99))
+  
+  
+  z_hat_99$condition <- z_hat_99_seurat@meta.data$major_labl[match(rownames(z_hat_99), 
+                                                                   colnames(z_hat_99_seurat))]
+  
+  return(z_hat_99)
+}
+
+
+
+extract_z_scores_Lavine <- function(preprocessed_data, z_score_column) {
+  # construct the new z for the new dataset
+  z_hat <- predZ(preprocessed_data$x_complete, preprocessed_data$er_res)
+  
+  # only look at the LF we are interested in
+  z_hat_99 <- as.data.frame(z_hat[, z_score_column])
+  colnames(z_hat_99) <- "score"
+  
+  # subset the seurat object
+  z_hat_99_seurat <- subset(x = preprocessed_data$seurat_obj, 
+                            cells = rownames(z_hat_99))
+  
+  
+  z_hat_99$condition <- z_hat_99_seurat$HF.etiology[match(rownames(z_hat_99), 
+                                                          colnames(z_hat_99_seurat))]
+  
+  return(z_hat_99)
+}
+
+
+# Function to create boxplot of z-scores
+plot_z_score_boxplot <- function(z_hat_99, title, custom_order = NULL) {
+  
+  if (!is.null(custom_order)) {
+    z_hat_99$condition <- factor(z_hat_99$condition, levels = custom_order)
+  }
+  
+  ggplot(z_hat_99, aes(x = condition, y = score)) +
+    geom_boxplot() + 
+    labs(
+      title = title,
+      x = "Condition",
+      y = "Z_Score"
+    ) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          panel.grid = element_blank(),
+          axis.line = element_line(color = "black"),
+          legend.key.size = unit(1, "cm"))
+}
+
+# Main script execution
+main <- function(seurat_path, er_results_path, z_score_column, plot_title, custom_order) {
+  
+  seurat_obj <- readRDS(seurat_path)
+  x <- as.matrix(seurat_obj@assays$SCT@data)
+  x <- t(x)
+  
+  preprocessed_data <- preprocess_data(x, er_results_path)
+  
+  preprocessed_data$seurat_obj <- seurat_obj
+  z_hat_99 <- extract_z_scores(preprocessed_data, z_score_column)
+  
+  plot <- plot_z_score_boxplot(z_hat_99, title = plot_title, custom_order = custom_order)
+  print(plot)
+  
+  return(list(
+    preprocessed_data = preprocessed_data,
+    z_hat_99 = z_hat_99,
+    plot = plot
+  ))
+}
+
+
+main_Lavine <- function(seurat_path, er_results_path, z_score_column, plot_title, custom_order) {
+  
+  seurat_obj <- readRDS(seurat_path)
+  x <- as.matrix(seurat_obj@assays$RNA$data)
+  x <- t(x)
+  
+  preprocessed_data <- preprocess_data(x, er_results_path)
+  
+  preprocessed_data$seurat_obj <- seurat_obj
+  z_hat_99 <- extract_z_scores_Lavine(preprocessed_data, z_score_column)
+  
+  plot <- plot_z_score_boxplot(z_hat_99, title = plot_title, custom_order = custom_order)
+  print(plot)
+  
+  return(list(
+    preprocessed_data = preprocessed_data,
+    z_hat_99 = z_hat_99,
+    plot = plot
+  ))
+}
+
+
+####################################################################################################################################
+# Mann Whitney
+perform_mw_tests <- function(df) {
+  # Get unique conditions
+  conditions <- unique(df$condition)
+  n_conditions <- length(conditions)
+  
+  # Create empty vectors to store results
+  comparisons <- c()
+  p_values <- c()
+  
+  if(n_conditions == 2) {
+    # For exactly 2 conditions
+    result <- wilcox.test(score ~ condition, data = df)
+    
+    # Store results
+    comparisons <- paste(conditions[1], "vs", conditions[2])
+    p_values <- result$p.value
+    
+  } else if(n_conditions > 2) {
+    # Perform specific pairwise comparisons
+    for(i in 1:(n_conditions-1)) {
+      for(j in (i+1):n_conditions) {
+        # Subset data for the two conditions being compared
+        test_data <- df[df$condition %in% c(conditions[i], conditions[j]), ]
+        
+        # Perform Mann-Whitney U test
+        result <- wilcox.test(score ~ condition, data = test_data)
+        
+        # Store results
+        comparisons <- c(comparisons, paste(conditions[i], "vs", conditions[j]))
+        p_values <- c(p_values, result$p.value)
+      }
+    }
+  } else {
+    stop("Error: Need at least 2 conditions to perform the test")
+  }
+  
+  # Create results dataframe
+  results_df <- data.frame(
+    p_val = p_values,
+    row.names = comparisons
+  )
+  
+  return(results_df)
+}
+
+
+####################################################################################################################################
+# Cliff's Delta
+
+# Function to perform pairwise Cliff's Delta calculations and save results
+perform_cliffs_delta <- function(df) {
+  # Load required package
+  library(effsize)
+  
+  # Get unique conditions
+  conditions <- unique(df$condition)
+  n_conditions <- length(conditions)
+  
+  # Create empty vectors to store results
+  comparisons <- c()
+  delta_values <- c()
+  
+  if(n_conditions == 2) {
+    # For exactly 2 conditions
+    group1 <- df$score[df$condition == conditions[1]]
+    group2 <- df$score[df$condition == conditions[2]]
+    
+    # Calculate Cliff's Delta
+    result <- cliff.delta(group1, group2)
+    
+    # Store results
+    comparisons <- paste(conditions[1], "vs", conditions[2])
+    delta_values <- result$estimate
+    
+  } else if(n_conditions > 2) {
+    # Perform specific pairwise comparisons
+    for(i in 1:(n_conditions-1)) {
+      for(j in (i+1):n_conditions) {
+        # Get scores for each condition
+        group1 <- df$score[df$condition == conditions[i]]
+        group2 <- df$score[df$condition == conditions[j]]
+        
+        # Calculate Cliff's Delta
+        result <- cliff.delta(group1, group2)
+        
+        # Store results
+        comparisons <- c(comparisons, paste(conditions[i], "vs", conditions[j]))
+        delta_values <- c(delta_values, result$estimate)
+      }
+    }
+  } else {
+    stop("Error: Need at least 2 conditions to calculate Cliff's Delta")
+  }
+  
+  # Create results dataframe
+  results_df <- data.frame(
+    cliffs_delta = delta_values,
+    row.names = comparisons
+  )
+  
+  return(results_df)
+}
+
+
+####################################################################################################################################
+# Q3 Box Plot
+
+counts_above_q3 <- function(df) {
+  # the input df has to have a score column and a condition column. 
+  # can just use the output of the main function above. 
+  q3_value <- quantile(df$score, 0.75)
+  
+  # Count points above Q3 for each condition
+  counts <- aggregate(score ~ condition, 
+                      data = df[df$score > q3_value,], 
+                      FUN = length)
+  
+  names(counts)[2] <- "count_above_q3"
+  
+  return(counts)
+}
+
+plot_counts <- function(counts_df, custom_order = NULL) {
+  # If custom order is provided, convert condition to factor with that order
+  if (!is.null(custom_order)) {
+    # Verify all conditions are in the custom order
+    if (!all(counts_df$condition %in% custom_order)) {
+      stop("All conditions must be present in custom_order")
+    }
+    if (!all(custom_order %in% counts_df$condition)) {
+      warning("Some values in custom_order are not present in the data")
+    }
+    
+    counts_df$condition <- factor(counts_df$condition, 
+                                  levels = custom_order)
+  }
+  
+  ggplot(counts_df, aes(x = condition, y = count_above_q3)) +
+    geom_bar(stat = "identity", fill = "steelblue") +
+    theme_minimal() +
+    labs(title = "Number of Points Above Q3 by Condition",
+         x = "Condition",
+         y = "Count of Points > Q3") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1),
+          panel.grid = element_blank(),
+          axis.line = element_line(color = "black"))
+}
+
+

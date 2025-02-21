@@ -1,0 +1,16 @@
+x_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/Data/x.csv
+y_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/Data/y.csv
+out_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/results/SLIDE_results/0.01_1_out/
+delta: 0.01
+lambda: 1
+spec: 0.1
+y_factor: yes
+y_levels:
+- 0
+- 1
+eval_type: auc
+SLIDE_iter: 1000
+SLIDE_top_feats: 10
+sampleCV_iter: 1000
+sampleCV_K: 4
+do_interacts: yes

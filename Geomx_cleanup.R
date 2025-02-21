@@ -15,7 +15,8 @@ library(ggplot2)
 ##                          Load Files                          ##
 ##################################################################
 
-datadir <- file.path("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/Dutta_NanoString/")
+#datadir <- file.path("/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/Dutta_NanoString/")
+datadir <- file.path("/ix/djishnu/Hanxi/MI_Spatial/RawData")
 
 #DCCs files - expression count data and sequencing quality metadata
 DCCFiles <- dir(file.path(datadir, "DCC-20230127"), pattern = ".dcc$", full.names = TRUE, recursive = TRUE)
@@ -24,7 +25,7 @@ DCCFiles <- dir(file.path(datadir, "DCC-20230127"), pattern = ".dcc$", full.name
 PKCFiles <- dir(file.path(datadir), pattern = ".pkc$", full.names = TRUE, recursive = TRUE)
 
 #SampleAnnotationFile <- dir(file.path(datadir, "annotation"), pattern = ".xlsx$", full.names = TRUE, recursive = TRUE)
-SampleAnnotationFile <- "/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MI_Spatial/raw_data/Dcc_Initial_Dataset_Dutta02.xlsx"
+SampleAnnotationFile <- "/ix/djishnu/Hanxi/MI_Spatial/RawData/Dcc_Initial_Dataset_Dutta02.xlsx"
 
 demoData <- readNanoStringGeoMxSet(dccFiles = DCCFiles,
                                    pkcFiles = PKCFiles,
@@ -209,8 +210,8 @@ target_demoData <- normalize(target_demoData , norm_method="quant",
 data_mat <- as.matrix(exprs(target_demoData))
 dim(data_mat)
 y <- recode(target_demoData@protocolData@data[["Status"]], 'Control' = 0, 'HF' = 1)
-write.csv(t(data_mat), '/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MultiOmic/Dutta_Spatial/ER_SLIDE/AllCell/022423/Data/x.csv')
-write.csv(y, '/Users/xiaoh/Library/CloudStorage/OneDrive-UniversityofPittsburgh/MultiOmic/Dutta_Spatial/ER_SLIDE/AllCell/022423/Data/y.csv')
+write.csv(t(data_mat), '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllCell/022423/x.csv')
+write.csv(y, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllCell/022423/y.csv')
 
 
 subset_demoData <- subset(target_demoData, select = phenoData(target_demoData)[["Segment (Name/ Label)"]] == 'CD 68')

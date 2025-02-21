@@ -1,6 +1,6 @@
 x_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/Data/x.csv
 y_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/Data/y.csv
-out_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/results/SLIDE_results/0.01_1_out/
+out_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/results/SLIDE_results_2/0.01_1_out/
 delta: 0.01
 lambda: 1
 spec: 0.1

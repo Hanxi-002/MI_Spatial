@@ -1,7 +1,7 @@
 ---
 x_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/Data/x.csv
 y_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/Data/y.csv
-out_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/results/SLIDE_results
+out_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllFibro/081224/results/SLIDE_results_2
 delta:
   - 0.01
   - 0.1

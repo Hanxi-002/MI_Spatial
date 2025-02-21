@@ -29,12 +29,12 @@ def plot_gene_hist(adata, goi, save_folder):
     sc.get.obs_df(adata, keys=goi, layer="imputed_count").hist()
     plt.savefig(f"{save_folder}/{goi}_hist.pdf")
 
-def calc_cell_identity_shifts (oracle, goi, save_folder, scale = 50, perturb_value = 0.0):
+def calc_cell_identity_shifts (oracle, goi, save_folder, n_neighbors = 50, scale = 50, perturb_value = 0.0):
     oracle.simulate_shift(perturb_condition={goi: perturb_value},
                         n_propagation=3)
 
     # Get transition probability
-    oracle.estimate_transition_prob(n_neighbors=50,
+    oracle.estimate_transition_prob(n_neighbors=n_neighbors,
                                     knn_random=True,
                                     sampled_fraction=1)
     # Calculate embedding
@@ -52,8 +52,8 @@ def calc_cell_identity_shifts (oracle, goi, save_folder, scale = 50, perturb_val
     plt.savefig(f"{save_folder}/{goi}_sim_shift.pdf")
     plt.show()
 
-def get_optimal_min_mass(n_grid, oracle):
-    oracle.calculate_p_mass(smooth=0.8, n_grid=n_grid, n_neighbors=50)
+def get_optimal_min_mass(n_grid, oracle, n_neighbors = 50):
+    oracle.calculate_p_mass(smooth=0.8, n_grid=n_grid, n_neighbors=n_neighbors)
     oracle.suggest_mass_thresholds(n_suggestion=12)
 
 def calc_vector_fields(min_mass, goi, oracle, save_folder, scale_simulation = 10):

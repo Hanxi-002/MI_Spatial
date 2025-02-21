@@ -1,0 +1,19 @@
+---
+x_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllCell/022423/x.csv
+y_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllCell/022423/y.csv
+out_path: /ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/AllCell/022423/SLIDE_Run_100824/results
+delta:
+  - 0.1
+lambda:
+  - 0.5
+spec: 0.3
+y_factor: TRUE
+y_levels:
+  - 0
+  - 1
+eval_type: auc
+SLIDE_iter: 500
+SLIDE_top_feats: 10
+sampleCV_iter: 1000
+sampleCV_K: 4
+do_interacts: TRUE

@@ -22,7 +22,6 @@ ggplot(graph_df,
   geom_point(size = 3) +
   theme_bw()
 
-
 set.seed(42) # set the seed for tSNE as well
 tsne_out <-
   Rtsne(t(log2(assayDataElement(target_demoData , elt = "q_norm"))),

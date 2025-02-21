@@ -16,6 +16,8 @@
   * run_SLIDEcv.yaml: yamil file for SLIDEcv.
   * run_SLIDEcv.R: R code to run SLIDEcv.
   * SLIDEcv_shell.sh: submit run_SLIDEcv.R as a job.
+  
+  * DESeq2.R: run DESeq on all fibroblasts with control aginst HF.
 
 ### Output
   * reults/SLIDE_results: all results from running SLIDE (optimizeSLIDE and SLIDEcv).

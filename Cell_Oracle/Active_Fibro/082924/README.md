@@ -19,6 +19,8 @@ Rerun Cell Oracle to
 * **pertrubed_oracle/021324_CO/overlap_objects_k_1:** the folder contains the perturbed adata_oracle object from the original link and adata_oracle objects produced in 021324 analyses, calculating transition counts with k set to 1. 
 * **pertrubed_oracle/082924_CO/linked_objects_k_5:** used perturbed oracle from "021324_CO/overlap_objects_k_1". The folder also contains all the bar plots for the transition counts, with k set to 5. 
 * **pertrubed_oracle/082924_CO/linked_objects_k_1:** the folder contains perturbed adata_oracle objects from the linked_TFs after relaxing the threshold of source node degrees. The folder also contains all the bar plots for the transition counts, with k set to 1. 
-* **pertrubed_oracle/082924_CO/linked_objects_k_1:** used perturbed oracle from "082924_CO/linked_objects_k_1". The folder also contains all the bar plots for the transition counts, with k set to 5. 
+* **pertrubed_oracle/082924_CO/linked_objects_k_5:** used perturbed oracle from "082924_CO/linked_objects_k_1". The folder also contains all the bar plots for the transition counts, with k set to 5. 
+
+* **pertrubed_oracle/082924_CO/linked_objects_summation:** used perturbed oracle object from "082924_CO/linked_objects_k_1". Summed up the "to" probability for each region for HF and Control. 
 
 * **figres/new_linked_TFs:** contains figures of the linked_TFs after relaxing the source node threshold. This is a super-set of the original linked_TFs in 021324.

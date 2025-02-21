@@ -57,9 +57,19 @@ adata_oracle.plot_dim_reduction(method = "umap", color = "Status")
 #dill.dump(adata_oracle, open('adata_oracle_CD68_CO_020124.pkl', 'wb'))
 
 
-# #load the pickle file through dill
-# with open('adata_oracle_CD68_CO_020124.pkl', 'rb') as f:
-#     adata_oracle = dill.load(f)
+#load the pickle file through dill
+with open('adata_oracle_CD68_CO_020124.pkl', 'rb') as f:
+    adata_oracle = dill.load(f)
+
+# # produce the UMAP coordinates for the pseudo color plots
+umap_coords = adata_oracle.adata.obsm['X_umap']
+# # Create a DataFrame from the UMAP coordinates
+umap_df = pd.DataFrame(umap_coords, columns=['UMAP1', 'UMAP2'], index=adata_oracle.adata.obs.index)
+umap_df['condition'] = adata_oracle.adata.obs['Status']
+# # Save the DataFrame to a CSV file
+umap_df.to_csv('CD68_umap_coordinates.csv')
+
+
 
 #%%
 # adata_oracle = dill.load(open('adata_oracle_CD68_CO_020124.pkl', 'rb'))
