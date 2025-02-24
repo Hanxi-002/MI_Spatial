@@ -43,7 +43,24 @@ write.csv(df, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/
 # --------------------------------------------------------------
 score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Z99_Score_by_Condition_(Lavine_Macrophage).csv', row.names = 1)
 results <- perform_cliffs_delta(score)
-write.csv(df, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Cliffs_Delta.csv')
+write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Cliffs_Delta.csv')
+
+####################################################################################################################################
+# ------------------------------------------------------------------
+# Replotting box plot to bar plot which shows # of samples above Q3
+# ------------------------------------------------------------------
+score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Z99_Score_by_Condition_(Lavine_Macrophage).csv', row.names = 1)
+q3_ratio <- counts_above_q3(score, baseline = 'CTRL')
+plot_ratios(results, custom_order = c('CTRL', 'BZ', 'FZ', 'IZ', 'RZ'))
+write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/q3_ratio.csv')
+
+# ------------------------------------------------------------------
+# Calculate paired proportional z test
+# ------------------------------------------------------------------
+# Pairwised comparison, but only with each condition vs control. 
+# p values not adjusted
+z_test = control_prop_test(q3_ratio$ratio_above_q3, q3_ratio$total_count, q3_ratio$condition, baseline = 'CTRL')
+write.csv(z_test, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/q3_ratio_significance.csv')
 
 
 ####################################################################################################################################

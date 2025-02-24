@@ -14,7 +14,7 @@ pData(target_demoData)[, c("UMAP1", "UMAP2")] <- umap_out$layout[, c(1,2)]
 
 graph_df <- pData(target_demoData)
 row.names(graph_df) == row.names(target_demoData@protocolData@data)
-graph_df['Status'] <- target_demoData@protocolData@data$Status
+graph_df['Status'] <- target_demoData@protocolData@data$Status0p
 graph_df['SegmentLabels'] <- target_demoData@protocolData@data$SegmentLabel
 
 ggplot(graph_df,

@@ -274,22 +274,44 @@ perform_cliffs_delta <- function(df) {
 ####################################################################################################################################
 # Q3 Box Plot
 
-counts_above_q3 <- function(df) {
+# baseline , string, is a condition in the condition column that used as the baseline for the ratio. 
+counts_above_q3 <- function(df, baseline = 'CTRL') {
+  
   # the input df has to have a score column and a condition column. 
   # can just use the output of the main function above. 
-  q3_value <- quantile(df$score, 0.75)
+  q3_value <- quantile(df[df$condition == baseline, ]$score, 0.75)
+  
+  # Count total points for each condition
+  total_counts <- aggregate(score ~ condition, data = df, FUN = length)
+  names(total_counts)[2] <- "total_count"
   
   # Count points above Q3 for each condition
-  counts <- aggregate(score ~ condition, 
-                      data = df[df$score > q3_value,], 
-                      FUN = length)
+  counts_above <- aggregate(score ~ condition, 
+                            data = df[df$score > q3_value,], 
+                            FUN = length)
+  names(counts_above)[2] <- "count_above_q3"
   
-  names(counts)[2] <- "count_above_q3"
+  # Manual merge using base R
+  result <- total_counts
+  result$count_above_q3 <- 0  # Initialize with zeros
   
-  return(counts)
+  # Fill in the counts for conditions that have points above q3
+  for(i in 1:nrow(counts_above)) {
+    cond <- counts_above$condition[i]
+    idx <- which(result$condition == cond)
+    if(length(idx) > 0) {
+      result$count_above_q3[idx] <- counts_above$count_above_q3[i]
+    }
+  }
+  
+  # Calculate the ratio
+  result$ratio_above_q3 <- result$count_above_q3 / result$total_count
+  
+  return(result)
 }
 
-plot_counts <- function(counts_df, custom_order = NULL) {
+
+plot_ratios <- function(counts_df, custom_order = NULL) {
   # If custom order is provided, convert condition to factor with that order
   if (!is.null(custom_order)) {
     # Verify all conditions are in the custom order
@@ -304,15 +326,77 @@ plot_counts <- function(counts_df, custom_order = NULL) {
                                   levels = custom_order)
   }
   
-  ggplot(counts_df, aes(x = condition, y = count_above_q3)) +
+  ggplot(counts_df, aes(x = condition, y = ratio_above_q3)) +
     geom_bar(stat = "identity", fill = "steelblue") +
     theme_minimal() +
-    labs(title = "Number of Points Above Q3 by Condition",
+    labs(title = "Ratio of Points Above Q3 by Condition",
          x = "Condition",
-         y = "Count of Points > Q3") +
+         y = "Ratio of Points > Q3") +
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           panel.grid = element_blank(),
           axis.line = element_line(color = "black"))
 }
 
+####################################################################################################################################
+# Q3 Box Plot, calculate paired proportional z test
 
+control_prop_test <- function(props, ns, conditions, baseline = "Control") {
+  
+  baseline_idx <- which(conditions == baseline)
+  if(length(baseline_idx) == 0) {
+    stop(paste("Baseline condition '", baseline, "' not found in condition names."))
+  }
+  
+  # get all other condition indices
+  test_indices <- setdiff(1:length(props), baseline_idx)
+  
+  # initiate an empty df to hold results
+  results <- data.frame(
+    condition = character(),
+    condition_prop = numeric(),
+    baseline_prop = numeric(),
+    diff = numeric(),
+    z_statistic = numeric(),
+    p_value = numeric(),
+    stringsAsFactors = FALSE
+  )
+  
+  # get baseline values
+  p_baseline <- props[baseline_idx]
+  n_baseline <- ns[baseline_idx]
+  
+  # calcualte the test statiscitcs
+  for (idx in test_indices) {
+    p_test <- props[idx]
+    n_test <- ns[idx]
+    
+    
+    p_pooled <- (p_baseline * n_baseline + p_test * n_test) / (n_baseline + n_test)
+    
+  
+    se <- sqrt(p_pooled * (1 - p_pooled) * (1/n_baseline + 1/n_test))
+    
+    
+    z <- (p_test - p_baseline) / se
+    
+    
+    p_val <- 2 * pnorm(-abs(z))
+    
+    results <- rbind(results, data.frame(
+      condition = conditions[idx],
+      condition_prop = p_test,
+      baseline_prop = p_baseline,
+      diff = p_test - p_baseline,
+      z_statistic = z,
+      p_value = p_val
+    ))
+  }
+  
+  # add significance stars based on raw p-values
+  results$significance <- ""
+  results$significance[results$p_value < 0.05] <- "*"
+  results$significance[results$p_value < 0.01] <- "**"
+  results$significance[results$p_value < 0.001] <- "***"
+  
+  return(results)
+}
