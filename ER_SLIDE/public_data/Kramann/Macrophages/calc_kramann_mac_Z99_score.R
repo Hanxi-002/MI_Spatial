@@ -51,23 +51,28 @@ write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Ma
 # Create the bar plot
 
 score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/Z99_Score_by_Condition_(Kramann_Mac).csv', row.names = 1)
-q3_ratio <- counts_above_q3(score, baseline = 'CTRL') # which one should I use for baseline.
-results <- counts_above_q3(score)
-plot_counts(results, custom_order = NULL)
+# nrow(score[score$condition == 'IZ', ]) # FZ v IZ =  29 v 4346
 
-####################################################################################################################################
-# ------------------------------------------------------------------
-# Replotting box plot to bar plot which shows # of samples above Q3
-# ------------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/Z37_Score_by_Condition_(Kramann_Fibroblast).csv', row.names = 1)
-q3_ratio <- counts_above_q3(score, baseline = 'CTRL')
-plot_ratios(results, custom_order = c('CTRL', 'BZ', 'FZ', 'IZ', 'RZ'))
-write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/q3_ratio.csv')
+set.seed(123) 
+FZ_score <- score[score$condition == 'FZ', ]
+IZ_score <- score[score$condition == 'IZ', ][sample(sum(score$condition == 'IZ'), nrow(FZ_score)), ]
+score_new <- rbind(FZ_score, IZ_score)
+
+q3_ratio <- counts_above_q3(score_new, baseline = 'IZ') # which one should I use for baseline.
+plot_ratios(q3_ratio, custom_order = c('FZ', 'IZ'))
+write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_ratio.csv')
+
 
 # ------------------------------------------------------------------
-# Calculate paired proportional z test
+# Calculate exact binomial test
 # ------------------------------------------------------------------
 # Pairwised comparison, but only with each condition vs control. 
 # p values not adjusted
-z_test = control_prop_test(q3_ratio$ratio_above_q3, q3_ratio$total_count, q3_ratio$condition, baseline = 'CTRL')
-write.csv(z_test, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/q3_ratio_significance.csv')
+
+counts = q3_ratio$count_above_q3
+ns = q3_ratio$total_count
+conditions = q3_ratio$condition
+res = exact_binomial_test(counts, ns, conditions, baseline = 'IZ')
+
+write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_ratio_significance.csv')
+

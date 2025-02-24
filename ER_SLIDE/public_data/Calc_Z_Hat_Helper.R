@@ -400,3 +400,60 @@ control_prop_test <- function(props, ns, conditions, baseline = "Control") {
   
   return(results)
 }
+
+
+exact_binomial_test <- function(counts, ns, conditions, baseline = "Control") {
+  # find the index of the baseline condition
+  baseline_idx <- which(conditions == baseline)
+  if(length(baseline_idx) == 0) {
+    stop(paste("Baseline condition '", baseline, "' not found in condition names."))
+  }
+  
+  # get all other condition indices
+  test_indices <- setdiff(1:length(counts), baseline_idx)
+  
+  results <- data.frame(
+    condition = character(),
+    condition_prop = numeric(),
+    baseline_prop = numeric(),
+    diff = numeric(),
+    p_value = numeric(),
+    test_type = character(),
+    stringsAsFactors = FALSE
+  )
+  
+  # get baseline values
+  p_baseline <- counts[baseline_idx] / ns[baseline_idx]
+  
+  for (idx in test_indices) {
+    successes <- counts[idx]
+    trials <- ns[idx]
+    p_test <- successes / trials
+    
+    # 2 tailed p value
+    p_val <- binom.test(
+      x = successes,
+      n = trials,
+      p = p_baseline,
+      alternative = "two.sided"
+    )$p.value
+    test_type <- "two.sided"
+    
+    results <- rbind(results, data.frame(
+      condition = conditions[idx],
+      condition_prop = p_test,
+      baseline_prop = p_baseline,
+      diff = p_test - p_baseline,
+      p_value = p_val,
+      test_type = test_type
+    ))
+  }
+  
+  # Add significance stars based on p-values
+  results$significance <- ""
+  results$significance[results$p_value < 0.05] <- "*"
+  results$significance[results$p_value < 0.01] <- "**"
+  results$significance[results$p_value < 0.001] <- "***"
+  
+  return(results)
+}

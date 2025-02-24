@@ -59,19 +59,16 @@ plot_ratios(q3_ratio, custom_order = c('Donor', 'AMI', 'ICM'))
 write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_ratio.csv')
 
 # ------------------------------------------------------------------
-# Calculate paired proportional z test
+# Calculate exact binomal test
 # ------------------------------------------------------------------
 # Pairwised comparison, but only with each condition vs control. 
 # p values not adjusted
-z_test = control_prop_test(q3_ratio$ratio_above_q3, q3_ratio$total_count, q3_ratio$condition, baseline = 'Donor')
-write.csv(z_test, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_ratio_significance.csv')
+q3_ratio = read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_ratio.csv', row.names = 1)
 
-####################################################################################################################################
-# ------------------------------------------------------------------
-# Replotting box plot to bar plot which shows # of samples above Q3
-# ------------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv', row.names = 1)
-results <- counts_above_q3(score)
-plot_counts(results)
+counts = q3_ratio$count_above_q3
+ns = q3_ratio$total_count
+conditions = q3_ratio$condition
+res = exact_binomial_test(counts, ns, conditions, baseline = 'Donor')
+write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_ratio_significance.csv')
 
 
