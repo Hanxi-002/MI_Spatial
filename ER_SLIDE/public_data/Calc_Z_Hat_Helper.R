@@ -132,6 +132,11 @@ main <- function(seurat_path, er_results_path, z_score_column, plot_title, custo
   preprocessed_data$seurat_obj <- seurat_obj
   z_hat_99 <- extract_z_scores(preprocessed_data, z_score_column)
   
+  if (length(custom_order) != length(unique(z_hat_99$condition))){
+    cat('subsetting z scores to only keep conditions specified in custom_order...')
+    z_hat_99 <- z_hat_99[z_hat_99$condition %in% custom_order, ]
+  }
+  
   plot <- plot_z_score_boxplot(z_hat_99, title = plot_title, custom_order = custom_order)
   print(plot)
   
@@ -326,8 +331,12 @@ plot_ratios <- function(counts_df, custom_order = NULL) {
                                   levels = custom_order)
   }
   
-  ggplot(counts_df, aes(x = condition, y = ratio_above_q3)) +
-    geom_bar(stat = "identity", fill = "steelblue") +
+  # Check if CI columns exist
+  has_ci <- all(c("ci_lower", "ci_upper") %in% colnames(counts_df))
+  
+  # Create the base plot
+  p <- ggplot(counts_df, aes(x = condition, y = ratio_above_q3)) +
+    geom_bar(stat = "identity", fill = "steelblue", color = "navy", size = 0.7, alpha = 0.7) +
     theme_minimal() +
     labs(title = "Ratio of Points Above Q3 by Condition",
          x = "Condition",
@@ -335,74 +344,64 @@ plot_ratios <- function(counts_df, custom_order = NULL) {
     theme(axis.text.x = element_text(angle = 45, hjust = 1),
           panel.grid = element_blank(),
           axis.line = element_line(color = "black"))
+  
+  # Add confidence intervals if they exist
+  if (has_ci) {
+    p <- p + 
+      geom_errorbar(
+        aes(ymin = ci_lower, ymax = ci_upper),
+        width = 0.2,
+        color = "black",
+        size = 1
+      ) +
+      labs(title = "Ratio of Points Above Q3 by Condition",
+           subtitle = "With 95% Clopper-Pearson confidence intervals",
+           x = "Condition",
+           y = "Ratio of Points > Q3")
+  }
+  
+  return(p)
 }
 
 ####################################################################################################################################
-# Q3 Box Plot, calculate paired proportional z test
+# Q3 Box Plot, calculate exact binomial test and CI for each group
 
-control_prop_test <- function(props, ns, conditions, baseline = "Control") {
+calc_Clopper_Pearson_CIs <- function(df, count_col = "count_above_q3", total_col = "total_count", conf_level = 0.95) {
+  # df is the output of counts_above_q3 ratio
   
-  baseline_idx <- which(conditions == baseline)
-  if(length(baseline_idx) == 0) {
-    stop(paste("Baseline condition '", baseline, "' not found in condition names."))
+  required_cols <- c(count_col, total_col)
+  if (!all(required_cols %in% colnames(df))) {
+    stop("Missing required columns in dataframe")
   }
   
-  # get all other condition indices
-  test_indices <- setdiff(1:length(props), baseline_idx)
   
-  # initiate an empty df to hold results
-  results <- data.frame(
-    condition = character(),
-    condition_prop = numeric(),
-    baseline_prop = numeric(),
-    diff = numeric(),
-    z_statistic = numeric(),
-    p_value = numeric(),
-    stringsAsFactors = FALSE
-  )
+  df$ci_lower <- NA
+  df$ci_upper <- NA
   
-  # get baseline values
-  p_baseline <- props[baseline_idx]
-  n_baseline <- ns[baseline_idx]
-  
-  # calcualte the test statiscitcs
-  for (idx in test_indices) {
-    p_test <- props[idx]
-    n_test <- ns[idx]
+  # Calculate CI for each condition
+  for (i in 1:nrow(df)) {
+    successes <- df[[count_col]][i]
+    trials <- df[[total_col]][i]
     
+    ci <- binom.test(
+      x = successes,
+      n = trials,
+      conf.level = conf_level
+    )$conf.int
     
-    p_pooled <- (p_baseline * n_baseline + p_test * n_test) / (n_baseline + n_test)
-    
-  
-    se <- sqrt(p_pooled * (1 - p_pooled) * (1/n_baseline + 1/n_test))
-    
-    
-    z <- (p_test - p_baseline) / se
-    
-    
-    p_val <- 2 * pnorm(-abs(z))
-    
-    results <- rbind(results, data.frame(
-      condition = conditions[idx],
-      condition_prop = p_test,
-      baseline_prop = p_baseline,
-      diff = p_test - p_baseline,
-      z_statistic = z,
-      p_value = p_val
-    ))
+    df$ci_lower[i] <- ci[1]
+    df$ci_upper[i] <- ci[2]
   }
   
-  # add significance stars based on raw p-values
-  results$significance <- ""
-  results$significance[results$p_value < 0.05] <- "*"
-  results$significance[results$p_value < 0.01] <- "**"
-  results$significance[results$p_value < 0.001] <- "***"
-  
-  return(results)
+  return(df)
 }
 
-
-exact_binomial_test <- function(counts, ns, conditions, baseline = "Control") {
+exact_binomial_test <- function(df, count_col = "count_above_q3", total_col = "total_count", condition_col = "condition", baseline = "IZ") {
+  # df is the output of counts_above_q3
+  # counts: number of counts of sucess
+  # ns: number of trails
+  # contidiont: different conditions
+  # baseline: the baseline to comapre to
   # find the index of the baseline condition
   baseline_idx <- which(conditions == baseline)
   if(length(baseline_idx) == 0) {
@@ -457,3 +456,70 @@ exact_binomial_test <- function(counts, ns, conditions, baseline = "Control") {
   
   return(results)
 }
+
+
+
+####################################################################################################################################
+# Q3 Box Plot, calculate paired proportional z test
+
+control_prop_test <- function(props, ns, conditions, baseline = "Control") {
+  
+  baseline_idx <- which(conditions == baseline)
+  if(length(baseline_idx) == 0) {
+    stop(paste("Baseline condition '", baseline, "' not found in condition names."))
+  }
+  
+  # get all other condition indices
+  test_indices <- setdiff(1:length(props), baseline_idx)
+  
+  # initiate an empty df to hold results
+  results <- data.frame(
+    condition = character(),
+    condition_prop = numeric(),
+    baseline_prop = numeric(),
+    diff = numeric(),
+    z_statistic = numeric(),
+    p_value = numeric(),
+    stringsAsFactors = FALSE
+  )
+  
+  # get baseline values
+  p_baseline <- props[baseline_idx]
+  n_baseline <- ns[baseline_idx]
+  
+  # calcualte the test statiscitcs
+  for (idx in test_indices) {
+    p_test <- props[idx]
+    n_test <- ns[idx]
+    
+    
+    p_pooled <- (p_baseline * n_baseline + p_test * n_test) / (n_baseline + n_test)
+    
+    
+    se <- sqrt(p_pooled * (1 - p_pooled) * (1/n_baseline + 1/n_test))
+    
+    
+    z <- (p_test - p_baseline) / se
+    
+    
+    p_val <- 2 * pnorm(-abs(z))
+    
+    results <- rbind(results, data.frame(
+      condition = conditions[idx],
+      condition_prop = p_test,
+      baseline_prop = p_baseline,
+      diff = p_test - p_baseline,
+      z_statistic = z,
+      p_value = p_val
+    ))
+  }
+  
+  # add significance stars based on raw p-values
+  results$significance <- ""
+  results$significance[results$p_value < 0.05] <- "*"
+  results$significance[results$p_value < 0.01] <- "**"
+  results$significance[results$p_value < 0.001] <- "***"
+  
+  return(results)
+}
+

@@ -1,8 +1,11 @@
 library(Seurat)
 library(ggplot2)
+library(dplyr)
 
 genes <- c('TVP23B', 'B3GALNT1', 'TDRD6', 'MAFK', 'MAZ')
 
+
+######################################### plot in the umap space #########################################
 ################################################################################################################
 #---------------------------------------------------------
 #pseudo color plot for macrophages in GeoMX
@@ -30,7 +33,7 @@ for (gene in genes){
           legend.key.size = unit(1, "cm"))  # Larger legend keys
   ggsave(paste0("/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/PseudoColor/Geomx_", gene, '.pdf'), width=8, height=6)
 }
-################################################################################################################
+################################################ Plot as ################################################################
 #---------------------------------------------------------
 #Pseudo plot for Lavine Macrophages. 
 #---------------------------------------------------------
@@ -175,3 +178,79 @@ for (gene in genes){
           legend.key.size = unit(1, "cm"))  # Larger legend keys
   ggsave(paste0("/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/PseudoColor/NewUmap_Kramann_", gene, '.pdf'), width=8, height=6)
 }
+
+
+
+
+############################################### Plot as Bar Plot ###############################################
+################################################################################################################
+#---------------------------------------------------------
+#pseudo color plot for macrophages in GeoMX
+#---------------------------------------------------------
+genes <- c('TVP23B', 'B3GALNT1', 'TDRD6', 'MAFK', 'MAZ')
+
+
+geomx <- readRDS('/ix/djishnu/Hanxi/MI_Spatial/Geomx_V3.RDS')
+geomx <- subset(geomx, select = geomx@phenoData@data$`CD 68` == TRUE)
+# the label for distance
+dist_label <- read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/Data/y.csv', row.names = 1)
+
+# create data for plotting
+#data = as.data.frame(geomx@assayData$q_norm[gene,])
+data = as.data.frame(geomx@protocolData@data$Status)
+colnames(data) = 'condition'
+row.names(data) = row.names(geomx@protocolData@data)
+
+# not all HF sampels got a distance label
+plot_df <- data %>% filter( condition == "Control" | (condition == "HF" & row.names(data) %in% row.names(dist_label)))
+
+for (i in 1:nrow(plot_df)){
+  if (plot_df$condition[i] == 'HF'){
+    label_idx <- which(row.names(dist_label) == row.names(plot_df)[i])
+    dist <- dist_label[label_idx, 1]
+    if (dist == 0){
+      dist = 'close to RF'
+    } else if (dist == 1){
+      dist = 'close to AF'
+    }
+    plot_df$condition[i] <- dist
+  }
+}
+
+# subset geomx to keep all the samples in the plot_df
+geomx <- geomx[, colnames(geomx) %in% rownames(plot_df)]
+
+for (gene in genes) {
+  plot_df['expr'] = geomx@assayData$q_norm[gene,]
+  corr_df <- plot_df
+  corr_df$condition <- ifelse(corr_df$condition == "Control", 0, 1)
+  cat('Correlation for gene', gene, ' is ', cor(corr_df$condition, corr_df$expr))
+  ggplot(plot_df, aes(x = condition, y = expr)) +
+    geom_boxplot(width = 0.7, outlier.shape = 16, outlier.size = 2) +
+    # Add individual data points with jitter for better visualization
+    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    theme_classic() +
+    labs(
+      title = "Expression by Condition",
+      x = "Condition",
+      y = "Expression"
+    ) +
+    theme(
+      axis.text.x = element_text(angle = 0, hjust = 0.5, size = 12),
+      axis.title = element_text(size = 14)
+    )
+  ggsave(paste0("/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/PseudoColor/GeoMX/", gene, '_box_plot.pdf'), width=8, height=6)
+  write.csv(plot_df, paste0('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/PseudoColor/GeoMX/', gene, '_box_plot.csv'))
+}
+
+##########################################
+# mac_geomx <- readRDS('/ix/djishnu/Hanxi/MI_Spatial/Geomx_V3.RDS')
+# mac_geomx <- subset(mac_geomx, select = mac_geomx@phenoData@data$`CD 68` == TRUE)
+# mac_y = as.data.frame(mac_geomx@protocolData@data$Status)
+# row.names(mac_y) <- row.names(mac_geomx@protocolData@data)
+# 
+# expr <- mac_geomx@assayData$q_norm['TVP23B', ]
+# mac_y[, 1] <- ifelse(mac_y[, 1] == "HF", 1, 0)
+# 
+# cor(expr, mac_y[, 1]) # -0.3500334
+
