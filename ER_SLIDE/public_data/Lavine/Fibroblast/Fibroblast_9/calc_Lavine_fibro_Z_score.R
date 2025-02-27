@@ -32,21 +32,22 @@ plot_title = "Z37 Score by Condition (Lavine Fibroblast_9)"
 
 custom_order = c("Donor", "AMI", "ICM")
 results <- main_Lavine(seurat_path, er_results_path, z_score_column, plot_title, custom_order = custom_order)
-write.csv(results$plot$data,'/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv')
-
+write.csv(results$plot$data,'/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/box_plot/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv')
+ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Z37_Score_by_Conition_(Lavine_Fibroblast_9).pdf', results$plot, width = 4, height = 6)
 # --------------------------------------------------------------
 # Mann-Whitney U test on the groups of the new z scores (z_hat)
 # --------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv', row.names = 1)
+score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/box_plot/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv', row.names = 1)
 df = perform_mw_tests(score)
-write.csv(df, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Mann_Whitney_P_val.csv')
 
 # --------------------------------------------------------------
 # Cliff's Delta Calculation
 # --------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv', row.names = 1)
+
 results <- perform_cliffs_delta(score)
-write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Cliffs_Delta.csv')
+
+sig <- cbind(df, results)
+write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/box_plot/score_box_significance.csv')
 
 
 ####################################################################################################################################
@@ -55,20 +56,26 @@ write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fib
 # ------------------------------------------------------------------
 score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv', row.names = 1)
 q3_ratio <- counts_above_q3(score, baseline = 'Donor')
-plot_ratios(q3_ratio, custom_order = c('Donor', 'AMI', 'ICM'))
+
+# ------------------------------------------------------------------
+# Clopper Pearson Confidence Interval
+# ------------------------------------------------------------------
+
+q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
 write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_ratio.csv')
 
 # ------------------------------------------------------------------
-# Calculate exact binomal test
+# Proportional Test
 # ------------------------------------------------------------------
-# Pairwised comparison, but only with each condition vs control. 
-# p values not adjusted
-q3_ratio = read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_ratio.csv', row.names = 1)
 
-counts = q3_ratio$count_above_q3
-ns = q3_ratio$total_count
-conditions = q3_ratio$condition
-res = exact_binomial_test(counts, ns, conditions, baseline = 'Donor')
-write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_ratio_significance.csv')
+#res = exact_binomial_test(df = q3_ratio, count_col = 'count_above_q3', condition_col = 'condition', baseline = 'IZ', total_col = 'total_count')
+res = control_prop_test(df = q3_ratio, props_col = 'ratio_above_q3', total_col = 'total_count', condition_col = 'condition', baseline = 'Donor')
+write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_significance.csv')
+
+# ------------------------------------------------------------------
+# Plot Q3 Bar Plot
+# ------------------------------------------------------------------
+q3_bar <- plot_ratios(q3_ratio, custom_order = c('Donor', 'AMI', 'ICM'))
+ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
 
 

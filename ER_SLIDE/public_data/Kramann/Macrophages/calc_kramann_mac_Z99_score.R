@@ -26,22 +26,21 @@ plot_title = "Z99 Score by Condition (Kramann Macrophages)"
 
 custom_order = c("IZ", "FZ")
 results <- main(seurat_path, er_results_path, z_score_column, plot_title, custom_order = custom_order)
-write.csv(results$plot$data, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/Z99_Score_by_Condition_(Kramann_Mac).csv')
-
+write.csv(results$plot$data, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/box_plot/Z99_Score_by_Condition_(Kramann_Mac).csv')
+ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/box_plot/Z99_Score_by_Condition_(Kramann_Mac).pdf', results$plot, width = 4, height = 6)
 
 # --------------------------------------------------------------
 # Mann-Whitney U test on the groups of the new z scores (z_hat)
 # --------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/Z99_Score_by_Condition_(Kramann_Mac).csv', row.names = 1)
+score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/box_plot/Z99_Score_by_Condition_(Kramann_Mac).csv', row.names = 1)
 df = perform_mw_tests(score)
-write.csv(df, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/Mann_Whitney_P_val.csv')
 
 # --------------------------------------------------------------
 # Cliff's Delta Calculation
 # --------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/Z99_Score_by_Condition_(Kramann_Mac).csv', row.names = 1)
 results <- perform_cliffs_delta(score)
-write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/Cliffs_Delta.csv')
+sig <- cbind(df, results)
+write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/box_plot/score_box_significance.csv')
 
 
 ####################################################################################################################################
@@ -59,20 +58,28 @@ IZ_score <- score[score$condition == 'IZ', ][sample(sum(score$condition == 'IZ')
 score_new <- rbind(FZ_score, IZ_score)
 
 q3_ratio <- counts_above_q3(score_new, baseline = 'IZ') # which one should I use for baseline.
-plot_ratios(q3_ratio, custom_order = c('FZ', 'IZ'))
+#plot_ratios(q3_ratio, custom_order = c('FZ', 'IZ'))
+#write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_ratio.csv')
+
+
+# ------------------------------------------------------------------
+# Clopper Pearson Confidence Interval
+# ------------------------------------------------------------------
+
+q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
 write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_ratio.csv')
 
+# ------------------------------------------------------------------
+# Proportional Test
+# ------------------------------------------------------------------
+
+#res = exact_binomial_test(df = q3_ratio, count_col = 'count_above_q3', condition_col = 'condition', baseline = 'IZ', total_col = 'total_count')
+res = control_prop_test(df = q3_ratio, props_col = 'ratio_above_q3', total_col = 'total_count', condition_col = 'condition', baseline = 'IZ')
+write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_significance.csv')
 
 # ------------------------------------------------------------------
-# Calculate exact binomial test
+# Plot Q3 Bar Plot
 # ------------------------------------------------------------------
-# Pairwised comparison, but only with each condition vs control. 
-# p values not adjusted
-
-counts = q3_ratio$count_above_q3
-ns = q3_ratio$total_count
-conditions = q3_ratio$condition
-res = exact_binomial_test(counts, ns, conditions, baseline = 'IZ')
-
-write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_ratio_significance.csv')
+q3_bar <- plot_ratios(q3_ratio)
+ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
 

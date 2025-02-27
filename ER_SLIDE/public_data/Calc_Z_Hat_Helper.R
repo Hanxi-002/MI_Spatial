@@ -403,6 +403,15 @@ exact_binomial_test <- function(df, count_col = "count_above_q3", total_col = "t
   # contidiont: different conditions
   # baseline: the baseline to comapre to
   # find the index of the baseline condition
+  required_cols <- c(count_col, total_col, condition_col)
+  if (!all(required_cols %in% colnames(df))) {
+    stop("Missing required columns in dataframe")
+  }
+  
+  conditions = df[, condition_col]
+  counts = df[, count_col]
+  ns = df[, total_col]
+  
   baseline_idx <- which(conditions == baseline)
   if(length(baseline_idx) == 0) {
     stop(paste("Baseline condition '", baseline, "' not found in condition names."))
@@ -462,7 +471,16 @@ exact_binomial_test <- function(df, count_col = "count_above_q3", total_col = "t
 ####################################################################################################################################
 # Q3 Box Plot, calculate paired proportional z test
 
-control_prop_test <- function(props, ns, conditions, baseline = "Control") {
+control_prop_test <- function(df, props_col = 'ratio_above_q3', total_col = 'total_count', condition_col = 'condition', baseline = "Control") {
+  
+  required_cols <- c(props_col, total_col, condition_col)
+  if (!all(required_cols %in% colnames(df))) {
+    stop("Missing required columns in dataframe")
+  }
+  
+  props = df[, props_col]
+  conditions = df[, condition_col]
+  ns = df[, total_col]
   
   baseline_idx <- which(conditions == baseline)
   if(length(baseline_idx) == 0) {

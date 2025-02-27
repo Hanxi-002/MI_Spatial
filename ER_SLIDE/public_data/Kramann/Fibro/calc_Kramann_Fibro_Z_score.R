@@ -61,13 +61,15 @@ q3_ratio <- counts_above_q3(score, baseline = 'IZ')
 # Clopper Pearson Confidence Interval
 # ------------------------------------------------------------------
 
-q3_ratio <- Calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
+q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
 write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/q3_ratio.csv')
 
 # ------------------------------------------------------------------
-# Exact Binomial Test
+# Proportional Test
 # ------------------------------------------------------------------
-res = exact_binomial_test(df = q3_ratio, count_col = 'count_above_q3', condition_col = 'condition', baseline = 'IZ', total_col = 'total_count')
+
+#res = exact_binomial_test(df = q3_ratio, count_col = 'count_above_q3', condition_col = 'condition', baseline = 'IZ', total_col = 'total_count')
+res = control_prop_test(df = q3_ratio, props_col = 'ratio_above_q3', total_col = 'total_count', condition_col = 'condition', baseline = 'IZ')
 write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/q3_significance.csv')
 
 # ------------------------------------------------------------------
