@@ -1,8 +1,8 @@
 #%%
 import sys
 sys.path.append("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/COAnalyses")
-from adata_oracle import *
-from oracle_links import *
+from adata_oracle import * # type: ignore
+from oracle_links import * # type: ignore
 import numpy as np
 import pandas as pd
 import dill
@@ -48,10 +48,20 @@ fig = sc.pl.umap(adata_oracle.adata, color='Status', show=False)
 plt.savefig('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/all_cell/012924/all_cell_umap.pdf', bbox_inches='tight', dpi=300)
 plt.show()
 
-umap_coords = pd.DataFrame(adata_oracle.adata.obsm['X_umap'])
-umap_coords.columns = ['UMAP1', 'UMAP2']
-umap_coords.index = adata_oracle.adata.obs.index
-umap_coords.to_csv('/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/all_cell/012924/allcell_umap_coords.csv')
+
+############## save the umap coordinates ################
+
+adata = sc.read_h5ad('Cell_Oracle/all_cell/012924/all_cell_adata.h5ad')
+
+fig = sc.pl.umap(adata, color='Status', show=False, size = 150)
+fig = sc.pl.umap(adata, color='cell_type', show=False, size = 150)
+
+
+cell_types = adata.obs['cell_type'].unique()
+for i, cell_type in enumerate(cell_types):
+    mask = adata.obs['cell_type'] == cell_type
+    fig = sc.pl.umap(adata[mask], title =f'{cell_type}', color='Status', show=False, size = 150)
+
 ############## save the adata object
 #adata_oracle.save_adata('all_cell_adata.h5ad')
 #adata = co.load_hdf5('all_cell_adata.h5ad')
