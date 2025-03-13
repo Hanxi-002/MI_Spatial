@@ -1,3 +1,8 @@
+*
+!/.gitignore
+!/manuscript-V1.0
+!/manuscript-V1.0/**
+
 #Data files
 *.zip
 *.xlsx
