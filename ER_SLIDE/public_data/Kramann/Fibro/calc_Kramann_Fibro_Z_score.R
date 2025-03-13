@@ -51,7 +51,7 @@ write.csv(sig, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/
 # ------------------------------------------------------------------
 # Replotting box plot to bar plot which shows # of samples above Q3
 # ------------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/Z37_Score_FZ_IZ_(Kramann_Fibroblast).csv', row.names = 1)
+score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/box_plot/Z37_Score_FZ_IZ_(Kramann_Fibroblast).csv', row.names = 1)
 dim(score[score$condition == 'FZ', ] ) # 6096
 dim(score[score$condition == 'IZ', ] ) # 5868
 
@@ -61,8 +61,10 @@ q3_ratio <- counts_above_q3(score, baseline = 'IZ')
 # Clopper Pearson Confidence Interval
 # ------------------------------------------------------------------
 
-q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
-write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/q3_ratio.csv')
+q3_ratio <- calc_SEM_CIs(q3_ratio)
+
+#q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
+write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/bar_plot/q3_ratio.csv')
 
 # ------------------------------------------------------------------
 # Proportional Test
@@ -76,7 +78,7 @@ write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/
 # Plot Q3 Bar Plot
 # ------------------------------------------------------------------
 q3_bar <- plot_ratios(q3_ratio)
-ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
+ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Fibro/Z37/bar_plot/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
 
 
 ############################################################# Z 17 #######################################################################

@@ -47,22 +47,24 @@ df = perform_mw_tests(score)
 results <- perform_cliffs_delta(score)
 
 sig <- cbind(df, results)
-write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/box_plot/score_box_significance.csv')
+write.csv(sig, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/box_plot/score_box_significance.csv')
 
 
 ####################################################################################################################################
 # ------------------------------------------------------------------
 # Replotting box plot to bar plot which shows # of samples above Q3
 # ------------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv', row.names = 1)
+score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/box_plot/Z37_Score_by_Condition_(Lavine_Fibroblast_9).csv', row.names = 1)
 q3_ratio <- counts_above_q3(score, baseline = 'Donor')
 
 # ------------------------------------------------------------------
 # Clopper Pearson Confidence Interval
 # ------------------------------------------------------------------
 
-q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
-write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_ratio.csv')
+#q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
+q3_ratio <- calc_SEM_CIs(q3_ratio)
+write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/bar_plot/q3_ratio.csv')
+
 
 # ------------------------------------------------------------------
 # Proportional Test
@@ -76,6 +78,6 @@ write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibrobl
 # Plot Q3 Bar Plot
 # ------------------------------------------------------------------
 q3_bar <- plot_ratios(q3_ratio, custom_order = c('Donor', 'AMI', 'ICM'))
-ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
+ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/Fibroblast_9/Z37/bar_plot/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
 
 

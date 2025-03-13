@@ -28,7 +28,7 @@ df = perform_mw_tests(score)
 results <- perform_cliffs_delta(score)
 
 sig <- cbind(df, results)
-write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/non_fibro_9/box_plot/score_box_significance.csv')
+write.csv(sig, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/non_fibro_9/box_plot/score_box_significance.csv')
 
 ####################################################################################################################################
 # ------------------------------------------------------------------
@@ -41,7 +41,8 @@ q3_ratio <- counts_above_q3(score, baseline = 'Donor')
 # Clopper Pearson Confidence Interval
 # ------------------------------------------------------------------
 
-q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
+q3_ratio <- calc_SEM_CIs(q3_ratio)
+#q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
 write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Fibroblast/non_fibro_9/bar_plot/q3_ratio.csv')
 
 # ------------------------------------------------------------------

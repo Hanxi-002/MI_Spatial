@@ -187,6 +187,7 @@ for (gene in genes){
 #---------------------------------------------------------
 #pseudo color plot for macrophages in GeoMX
 #---------------------------------------------------------
+source('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Calc_Z_Hat_Helper.R')
 genes <- c('TVP23B', 'B3GALNT1', 'TDRD6', 'MAFK', 'MAZ')
 
 
@@ -220,18 +221,30 @@ for (i in 1:nrow(plot_df)){
 # subset geomx to keep all the samples in the plot_df
 geomx <- geomx[, colnames(geomx) %in% rownames(plot_df)]
 
+
+
 for (gene in genes) {
   plot_df['expr'] = geomx@assayData$q_norm[gene,]
   corr_df <- plot_df
   corr_df$condition <- ifelse(corr_df$condition == "Control", 0, 1)
   cat('Correlation for gene', gene, ' is ', cor(corr_df$condition, corr_df$expr))
-  ggplot(plot_df, aes(x = condition, y = expr)) +
+  
+  
+  # Mann-Whitney U Test
+  non_controls = plot_df[plot_df$condition %in% c("close to RF", "close to AF"), ]
+  p_vals = perform_mw_tests(non_controls, condition_col = "condition", score_col ="expr")
+  
+  custom_order <- c("close to RF", "close to AF")
+  # Convert the condition column to a factor with the custom order
+  non_controls$condition <- factor(non_controls$condition, levels = custom_order)
+  # Then use your original plot code
+  ggplot(non_controls, aes(x = condition, y = expr)) +
     geom_boxplot(width = 0.7, outlier.shape = 16, outlier.size = 2) +
     # Add individual data points with jitter for better visualization
-    geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
+    # geom_jitter(width = 0.2, alpha = 0.5, size = 1.5) +
     theme_classic() +
     labs(
-      title = "Expression by Condition",
+      title = paste0(gene, " Expression by Condition"),
       x = "Condition",
       y = "Expression"
     ) +
@@ -240,7 +253,8 @@ for (gene in genes) {
       axis.title = element_text(size = 14)
     )
   ggsave(paste0("/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/PseudoColor/GeoMX/", gene, '_box_plot.pdf'), width=8, height=6)
-  write.csv(plot_df, paste0('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/PseudoColor/GeoMX/', gene, '_box_plot.csv'))
+  write.csv(non_controls, paste0('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/PseudoColor/GeoMX/', gene, '_box_plot.csv'))
+  write.csv(p_vals, paste0('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/PseudoColor/GeoMX/', gene, '_p_vals.csv'))
 }
 
 ##########################################

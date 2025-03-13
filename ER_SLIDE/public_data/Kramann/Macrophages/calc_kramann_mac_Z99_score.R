@@ -40,7 +40,7 @@ df = perform_mw_tests(score)
 # --------------------------------------------------------------
 results <- perform_cliffs_delta(score)
 sig <- cbind(df, results)
-write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/box_plot/score_box_significance.csv')
+write.csv(sig, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/box_plot/score_box_significance.csv')
 
 
 ####################################################################################################################################
@@ -49,7 +49,7 @@ write.csv(results, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Ma
 # ------------------------------------------------------------------
 # Create the bar plot
 
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/Z99_Score_by_Condition_(Kramann_Mac).csv', row.names = 1)
+score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/bar_plot/Z99_Score_by_Condition_(Kramann_Mac).csv', row.names = 1)
 # nrow(score[score$condition == 'IZ', ]) # FZ v IZ =  29 v 4346
 
 set.seed(123) 
@@ -66,8 +66,8 @@ q3_ratio <- counts_above_q3(score_new, baseline = 'IZ') # which one should I use
 # Clopper Pearson Confidence Interval
 # ------------------------------------------------------------------
 
-q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
-write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_ratio.csv')
+q3_ratio <- calc_SEM_CIs(q3_ratio)
+write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/bar_plot/q3_ratio.csv')
 
 # ------------------------------------------------------------------
 # Proportional Test
@@ -81,5 +81,5 @@ write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrop
 # Plot Q3 Bar Plot
 # ------------------------------------------------------------------
 q3_bar <- plot_ratios(q3_ratio)
-ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
+ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Kramann/Macrophages/bar_plot/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
 

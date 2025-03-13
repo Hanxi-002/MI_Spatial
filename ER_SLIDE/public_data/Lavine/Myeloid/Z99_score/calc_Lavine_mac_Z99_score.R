@@ -50,15 +50,16 @@ write.csv(sig, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid
 # ------------------------------------------------------------------
 # Replotting box plot to bar plot which shows # of samples above Q3
 # ------------------------------------------------------------------
-score <-read.csv('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Z99_score/Z99_Score_by_Condition_(Lavine_Macrophage).csv', row.names = 1)
+score <-read.csv('//ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Z99_score/box_plot/Z99_Score_by_Condition_(Lavine_Macrophage).csv', row.names = 1)
 q3_ratio <- counts_above_q3(score, baseline = 'Donor')
 
 # ------------------------------------------------------------------
 # Clopper Pearson Confidence Interval
 # ------------------------------------------------------------------
 
-q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
-write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Z99_score/q3_ratio.csv')
+q3_ratio <- calc_SEM_CIs(q3_ratio)
+#q3_ratio <- calc_Clopper_Pearson_CIs(q3_ratio,count_col = 'count_above_q3', total_col = 'total_count')
+write.csv(q3_ratio, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Z99_score/bar_plot/q3_ratio.csv')
 
 # ------------------------------------------------------------------
 # Proportional Test
@@ -72,7 +73,7 @@ write.csv(res, '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid
 # Plot Q3 Bar Plot
 # ------------------------------------------------------------------
 q3_bar <- plot_ratios(q3_ratio, custom_order = c('Donor', 'AMI', 'ICM'))
-ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Z99_score/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
+ggsave('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Lavine/Myeloid/Z99_score/bar_plot/q3_bar_plot.pdf', q3_bar, width = 4, height = 6)
 
 
 
