@@ -1,6 +1,6 @@
 #%%
 import sys
-sys.path.append("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/COAnalyses")
+sys.path.append("/ocean/projects/cis240075p/hxiao2/MI_Spatial/Cell_Oracle/COAnalyses")
 from adata_oracle import *
 from oracle_links import *
 import numpy as np
@@ -10,6 +10,8 @@ import os
 import matplotlib.pyplot as plt
 import celloracle as co
 %matplotlib inline
+
+=
 #%%
 ############## load data
 print(os.getcwd())
