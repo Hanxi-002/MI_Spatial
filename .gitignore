@@ -15,6 +15,7 @@
 *.celloracle.links
 *.celloracle.oracle
 *.pkl
+data/
 # History files
 .Rhistory
 .Rapp.history
