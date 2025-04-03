@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import celloracle as co
 %matplotlib inline
 
-=
+
 #%%
 ############## load data
 print(os.getcwd())
