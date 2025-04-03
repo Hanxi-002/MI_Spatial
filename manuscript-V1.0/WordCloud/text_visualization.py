@@ -614,7 +614,7 @@ Our_mac_process = 'Extracellular matrix organization and immune response modulat
 6. **Signal Transduction and Regulation**: GNB2 and GNAI2 are involved in G-protein signaling pathways, which are critical for transmitting extracellular signals to intracellular responses. DUSP1 is a phosphatase that deactivates MAP kinases, thus regulating signal transduction pathways.\\\
 The system of interacting proteins primarily focuses on the structural organization of the ECM and modulation of immune responses, with additional roles in cellular stress response, protein synthesis, and signal transduction. The integration of these processes suggests a coordinated effort to maintain tissue integrity and modulate immune functions.'\
 \
-Hanxi_mac_bio = 'Collagen and Extracellular Matrix Proteins\\\
+Our_mac_bio = 'Collagen and Extracellular Matrix Proteins\\\
 - **COL1A1, COL1A2, COL3A1, COL4A1, COL4A2, COL6A1, COL6A3, SPARC, BGN, FN1, SPON2, AEBP1, TIMP1**: These proteins are primarily involved in the formation and maintenance of the extracellular matrix (ECM). Collagens (COL1A1, COL1A2, COL3A1, COL4A1, COL4A2, COL6A1, COL6A3) are structural proteins that provide tensile strength and structural integrity to tissues. SPARC (osteonectin) is involved in collagen binding and ECM remodeling. BGN (biglycan) and FN1 (fibronectin) are ECM components that interact with collagens and other matrix proteins to influence cell adhesion and migration. TIMP1 is a tissue inhibitor of metalloproteinases, regulating ECM degradation. This group suggests a role in tissue remodeling, wound healing, or fibrosis.\\\
 Immune System and Inflammation\\\
 - **CIITA, IL10RA, CD74, FCGR2C, B2M, CTSZ, LGMN, GRN, CFLAR**: These proteins are associated with immune response and inflammation. CIITA is a transcriptional activator of MHC class II genes, crucial for antigen presentation. IL10RA is a receptor for interleukin-10, an anti-inflammatory cytokine. CD74 is involved in antigen processing and presentation. FCGR2C is a receptor for the Fc region of IgG, playing a role in immune complex clearance. B2M is part of the MHC class I molecule. CTSZ and LGMN are proteases involved in antigen processing. GRN (progranulin) has roles in inflammation and tissue repair. CFLAR is involved in apoptosis regulation. This group suggests involvement in immune regulation and inflammatory processes.\\\
@@ -647,11 +647,110 @@ Our_mac_dist_bio = '1. **Cardiac and Muscle Function Proteins**: \\\
    - **KDM5C, MAZ, ELF2**: KDM5C is a histone demethylase involved in chromatin remodeling. MAZ is a transcription factor, and ELF2 is involved in transcriptional regulation. Alterations in these proteins can affect gene expression and are linked to intellectual disabilities and cancer.\\\
 The proteins identified are primarily involved in cardiac and muscle function, signal transduction, protein synthesis and degradation, immune response, metabolic processes, and transcriptional regulation. The strong presence of muscle-related proteins suggests a potential focus on muscle integrity and function, possibly indicating a role in cardiomyopathies or muscular dystrophies. The involvement of signaling and transcriptional regulation proteins points to potential links with cancer and metabolic disorders. Immune-related proteins suggest a possible connection to inflammatory diseases. Overall, the interplay of these proteins suggests a complex network that could be involved in maintaining cellular homeostasis, with implications for various disease processes, particularly those affecting the heart, muscles, and immune system.'\
 \
-\
+# ICM-CTRL vs AF\
 comp_wordcloud_bio = create_comparative_wordcloud_color(\
     preprocess_terms(L_ICM_fib_process).join(preprocess_terms(L_ICM_fib_bio)),\
     preprocess_terms(AF_process).join(preprocess_terms(AF_bio)),\
     'Lavine ICM v CTRL Fibroblasts', 'AF Fibroblasts'\
     )\
 # Save the image\
-plt.savefig("comparative_wordcloud_L_ICM_v_AF_fib.png", dpi=300, bbox_inches='tight')}
+plt.savefig("comparative_wordcloud_L_ICM_v_AF_fib.png", dpi=300, bbox_inches='tight')\
+\
+# AMI-CTRL vs AF\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_AMI_fib_process).join(preprocess_terms(L_AMI_fib_bio)),\
+    preprocess_terms(AF_process).join(preprocess_terms(AF_bio)),\
+    'Lavine AMI v CTRL Fibroblasts', 'AF Fibroblasts'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_AMI_v_AF_fib.png", dpi=300, bbox_inches='tight')\
+\
+# ICM-CTRL vs CCR2\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_ICM_fib_process).join(preprocess_terms(L_ICM_fib_bio)),\
+    preprocess_terms(CCR2_process).join(preprocess_terms(CCR2_bio)),\
+    'Lavine ICM v CTRL Fibroblasts', 'CCR2 Fibroblasts'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_ICM_v_CCR2_fib.png", dpi=300, bbox_inches='tight')\
+\
+# AMI-CTRL vs CCR2\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_AMI_fib_process).join(preprocess_terms(L_AMI_fib_bio)),\
+    preprocess_terms(CCR2_process).join(preprocess_terms(CCR2_bio)),\
+    'Lavine AMI v CTRL Fibroblasts', 'CCR2 Fibroblasts'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_AMI_v_CCR2_fib.png", dpi=300, bbox_inches='tight')\
+\
+# IZ-CTRL vs AF\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_IZ_fib_process).join(preprocess_terms(L_IZ_fib_bio)),\
+    preprocess_terms(AF_process).join(preprocess_terms(AF_bio)),\
+    'Lavine IZ v CTRL Fibroblasts', 'AF Fibroblasts'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_IZ_v_AF_fib.png", dpi=300, bbox_inches='tight')\
+\
+# BZ-CTRL vs AF\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_BZ_fib_process).join(preprocess_terms(L_BZ_fib_bio)),\
+    preprocess_terms(AF_process).join(preprocess_terms(AF_bio)),\
+    'Lavine BZ v CTRL Fibroblasts', 'AF Fibroblasts'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_BZ_v_AF_fib.png", dpi=300, bbox_inches='tight')\
+\
+# IZ-CTRL vs CCR2\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_IZ_fib_process).join(preprocess_terms(L_IZ_fib_bio)),\
+    preprocess_terms(CCR2_process).join(preprocess_terms(CCR2_bio)),\
+    'Lavine IZ v CTRL Fibroblasts', 'CCR2 Fibroblasts'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_IZ_v_CCR2_fib.png", dpi=300, bbox_inches='tight')\
+\
+# BZ-CTRL vs CCR2\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_BZ_fib_process).join(preprocess_terms(L_BZ_fib_bio)),\
+    preprocess_terms(CCR2_process).join(preprocess_terms(CCR2_bio)),\
+    'Lavine BZ v CTRL Fibroblasts', 'CCR2 Fibroblasts'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_BZ_v_CCR2_fib.png", dpi=300, bbox_inches='tight')\
+\
+# ICM-CTRl vs Mac\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_ICM_mac_process).join(preprocess_terms(L_ICM_mac_bio)),\
+    preprocess_terms(Our_mac_process).join(preprocess_terms(Our_mac_bio)),\
+    'Lavine ICM v CTRL Macrophages', 'Our Macrophages'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_ICM_v_Our_mac.png", dpi=300, bbox_inches='tight')\
+\
+# AMI-CTRl vs Mac\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_AMI_mac_process).join(preprocess_terms(L_AMI_mac_bio)),\
+    preprocess_terms(Our_mac_process).join(preprocess_terms(Our_mac_bio)),\
+    'Lavine AMI v CTRL Macrophages', 'Our Macrophages'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_AMI_v_Our_mac.png", dpi=300, bbox_inches='tight')\
+\
+# ICM-CTRl vs Mac_DIST\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_ICM_mac_process).join(preprocess_terms(L_ICM_mac_bio)),\
+    preprocess_terms(Our_mac_dist_process).join(preprocess_terms(Our_mac_dist_bio)),\
+    'Lavine ICM v CTRL Macrophages', 'Our DIST Macrophages'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_ICM_v_Our_dist_mac.png", dpi=300, bbox_inches='tight')\
+\
+# AMI-CTRl vs Mac_DIST\
+comp_wordcloud_bio = create_comparative_wordcloud_color(\
+    preprocess_terms(L_AMI_mac_process).join(preprocess_terms(L_AMI_mac_bio)),\
+    preprocess_terms(Our_mac_dist_process).join(preprocess_terms(Our_mac_dist_bio)),\
+    'Lavine AMI v CTRL Macrophages', 'Our DIST Macrophages'\
+    )\
+# Save the image\
+plt.savefig("comparative_wordcloud_L_AMI_v_Our_dist_mac.png", dpi=300, bbox_inches='tight')}
