@@ -1,13 +1,13 @@
 library(Seurat)
 library(ggplot2)
-source('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/public_data/Calc_Z_Hat_Helper.R')
+source('/ocean/projects/cis240075p/hxiao2/MI_Spatial/ER_SLIDE/public_data/Calc_Z_Hat_Helper.R')
 
 ####################################################################################################################################
 # --------------------------------------------
 # Check Z99 sign with GeoMx Data
 # -------------------------------------------
-y_path = '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/Data/y.csv'
-z_path = '/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/results/SLIDE_Results/z_matrix.csv'
+y_path = '/ocean/projects/cis240075p/hxiao2/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/Data/y.csv'
+z_path = '/ocean/projects/cis240075p/hxiao2/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/results/SLIDE_Results/z_matrix.csv'
 z_score_column = 99
 custom_labels = c('close to RF', 'close to AF')
 find_LF_sign(y_path, z_path, z_score_column, custom_labels)

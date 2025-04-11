@@ -1,9 +1,9 @@
-source("/ix/djishnu/Hanxi/Common_R/CalcCliffDelta_Helper.R")
+source("/ocean/projects/cis240075p/hxiao2/Common_R/CalcCliffDelta_Helper.R")
 
-z_matrix = read.csv("/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/results/SLIDE_Results/z_matrix.csv", row.names = 1)
+z_matrix = read.csv("/ocean/projects/cis240075p/hxiao2/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/results/SLIDE_Results/z_matrix.csv", row.names = 1)
 interacting_z = z_matrix[ , colnames(z_matrix)%in% c("Z45", "Z131")]
 
-y = read.csv("/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/Data/y.csv", row.names = 1)
+y = read.csv("/ocean/projects/cis240075p/hxiao2/MI_Spatial/ER_SLIDE/Within_Region/121223_hf_mac/Data/y.csv", row.names = 1)
 
 comb = GetPairwiseComb(y[, 1])
 
