@@ -173,8 +173,8 @@ plot_df = pd.concat([auc_qPCR, auc_freq, auc_MFI], axis=0)
 plot_df.index = ['qPCR', 'freq', 'MFI']
 plot_df.shape
 # drop the columns that have NaN
-# plot_df = plot_df.dropna(axis=1)
-# plot_df.shape
+plot_df = plot_df.dropna(axis=1)
+plot_df.shape
 
 # split the plot_df into 2 parts: TF and NonTF
 human_TFs = pd.read_csv('Cell_Oracle/allTFs_hg38_Scenic.txt', sep='\t', header=None)
@@ -182,7 +182,7 @@ human_TF_set = set(human_TFs[0].str.upper())
 gene_names = ['Ddx5', 'B3galnt1', 'Hnrnph3', 'Npipb6', 'Tdrd6', 'Tvp23b', 'Aasdhppt', 'Tgfb', 'Maz', 'Mafk', 'Atf3', 'Egr1', 'Ep300', 'Klf3']
 TF_names = [f"si{g.upper()[0]}{g.lower()[1:]}_NT" for g in gene_names if g.upper() in human_TF_set]
 # add in the controls
-TF_names_all = TF_names + ['siCtrl oxLDL_NT', 'siCtrl nLDL_NT', 'Tgfb_NT']
+TF_names_all = TF_names + ['Tgfb_NT']
 plot_df_TF = plot_df[TF_names_all]
 plot_df_nonTF = plot_df.drop(columns=TF_names)
 
@@ -191,12 +191,11 @@ plot_df_TF = plot_df_TF.applymap(lambda x: 1-x if x < 0.5 else x)
 plot_df_nonTF = plot_df_nonTF.applymap(lambda x: 1-x if x < 0.5 else x)
 plot_df_nonTF['siIqgap1_NT']  = [1.0, 0.5825, 0.9550]
 # drop the column siIqgap1_NT from plot_df_TF
-plot_df_nonTF = plot_df_nonTF.drop(columns=['siIqgap_NT'])
+# plot_df_nonTF = plot_df_nonTF.drop(columns=['siIqgap_NT'])
 
 # plot the data
 
 def plot_grouped_bars(df, out_path):
-    #df = plot_df_nonTF
     fig = go.Figure()
 
     # Define colors for each metric
@@ -208,8 +207,11 @@ def plot_grouped_bars(df, out_path):
     bar_height = 0.2
     group_gap = 0.3
 
-    # Get all column names (gene names)
-    gene_names = sorted(df.columns.tolist())
+    # get all column names (gene names)
+    # gene_names = sorted(df.columns.tolist())
+    # sort the gene names based on the column mean
+    gene_names = df.columns.tolist()
+    gene_names = sorted(gene_names, key=lambda x: df[x].mean(), reverse=False)
 
     # For each gene, create a group of bars
     for i, gene in enumerate(gene_names):
@@ -268,5 +270,5 @@ def plot_grouped_bars(df, out_path):
 
     fig.write_image(out_path, width=500, height=500, scale=2) 
 
-plot_grouped_bars(plot_df_TF, "siRNA_Analyses/Pairwise_Classifier/auc_plot_TF.pdf")
-plot_grouped_bars(plot_df_nonTF, "siRNA_Analyses/Pairwise_Classifier/auc_plot_nonTF.pdf")
+plot_grouped_bars(plot_df_TF, "siRNA_Analyses/Pairwise_Classifier/auc_plot_TF_v3.pdf")
+plot_grouped_bars(plot_df_nonTF, "siRNA_Analyses/Pairwise_Classifier/auc_plot_nonTF_v3.pdf")
