@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/COAnalyses")
+sys.path.append("Cell_Oracle/COAnalyses")
 import pickle as pkl
 from adata_oracle import *
 from oracle_links import *
@@ -112,7 +112,7 @@ def calcualte_cluster_frac_and_diff_per_TF(magnitude_diff, status_dict, magnitud
                 # get the fraction
                 cluster_fraction = sum(cluster_data['magnitude'] > magnitude_thresh) / len(cluster_data)
                 # get the median differences
-                med_diff = np.median(cluster_dat[acluster_data['magnitude'] > magnitude_thresh]['magnitude'])
+                med_diff = np.median(cluster_data[cluster_data['magnitude'] > magnitude_thresh]['magnitude'])
             else:
                 cluster_fraction = 0
                 med_diff = 0

@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/COAnalyses")
+sys.path.append("Cell_Oracle/COAnalyses")
 import pickle as pkl
 from adata_oracle import *
 from oracle_links import *
