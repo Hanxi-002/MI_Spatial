@@ -1,26 +1,11 @@
-setwd("/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/ActiveFibro/121223/")
-library(EnhancedVolcano)
-library(ggplot2)
-library(DESeq2)
-library(airway)
-library(magrittr)
+setwd("/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/ActiveFibro/121223/DESeq")
+source('/ix/djishnu/Hanxi/MI_Spatial/ER_SLIDE/Find_DEGs_Helper.R')
 
 count <- t(read.csv("Data/x.csv", row.names = 1))
 meta <- read.csv("Data/y.csv", row.names = 1)
-meta$V1 <- factor(meta$V1)
+DEGs = calculate_DEGs(count, meta, file_name = 'DESeq2_res_20250319.RDS')
 
-dds <- DESeqDataSetFromMatrix(countData = round(count), colData = meta, design = ~V1, tidy = FALSE)
-dds <- DESeq(dds, betaPrior = FALSE)
-res <- results(dds)
-res <- lfcShrink(dds, coef=2, res=res)
-saveRDS(res, "DESeq/DESeq_res.RDS")
 
-ggsave(plot = EnhancedVolcano(res,
-                lab = rownames(res),
-                x = 'log2FoldChange',
-                y = 'padj',
-                FCcutoff = 1,
-                pCutoff = 10e-6,
-                xlim = c(-6, 6)),
-       file = "DESeq/Volcano_symm.pdf"
-)
+custom_color = c("grey30", "grey30", "grey30", "#8FBC8F")
+file_name = "volcano_20250319.pdf"
+plot_volcano(DEGs = DEGs, custom_color = custom_color, file_name = file_name)
