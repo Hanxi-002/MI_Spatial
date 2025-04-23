@@ -157,80 +157,143 @@ def calcualte_status_frac_and_diff_per_TF(magnitude_diff, status_dict, magnitude
         return None 
 
 
-def plot_bubble_plot(df, title, output_file):
-    # Define fixed bubble size values
-    MIN_BUBBLE_SIZE = 0
-    MAX_BUBBLE_SIZE = 70  # Fixed bubble size across runs
-    
-    # Validate that "Fraction" is normalized between [0, 1]
-    assert df["Fraction"].max() <= 1 and df["Fraction"].min() >= 0, \
-        "Fraction column values must be between 0 and 1."
+def plot_bubble_plot(df, title, output_file, plot_bubble_size = True):
 
-    # Map "Fraction" directly to bubble sizes
-    bubble_sizes = df["Fraction"] * MAX_BUBBLE_SIZE  # Fixed scale mapping
+    if plot_bubble_size is True:
+        # Define fixed bubble size values
+        MIN_BUBBLE_SIZE = 0
+        MAX_BUBBLE_SIZE = 70  # Fixed bubble size across runs
+        
+        # Validate that "Fraction" is normalized between [0, 1]
+        assert df["Fraction"].max() <= 1 and df["Fraction"].min() >= 0, \
+            "Fraction column values must be between 0 and 1."
 
-    # Create the scatter plot without automatic size scaling
-    fig = px.scatter(
-        df,
-        x="TF",
-        y="Status",
-        color="Median Differences",
-        color_continuous_scale="Viridis",  # Color scale
-        title=title,
-        labels={
-            "Fraction": "Fraction of Cells",
-            "Median Differences": "Median Differences"
-        }
-    )
+        # bubble_sizes = df["Fraction"] * MAX_BUBBLE_SIZE
+        bubble_sizes = df["Median Differences"] * MAX_BUBBLE_SIZE
 
-    # Update bubble sizes manually
-    fig.update_traces(marker=dict(size=bubble_sizes, sizemode='diameter'))
+        # Create the scatter plot without automatic size scaling
+        fig = px.scatter(
+            df,
+            x="TF",
+            y="Status",
+            color="Fraction",
+            color_continuous_scale="Viridis",  # Color scale
+            title=title,
+            labels={
+                "Fraction": "Fraction of Cells",
+                "Median Differences": "Median Differences"
+            }
+        )
 
-    # Add x-axis and y-axis lines and expand plot dimensions
-    fig.update_layout(
-        xaxis_title="TF",
-        yaxis_title="Status",
-        template="plotly_white",
-        yaxis=dict(dtick=1),  # Show every integer on y-axis
-        shapes=[
-            # x-axis line
-            dict(
-                type="line",
-                x0=-0.5,
-                y0=-0.5,
-                x1=len(df["TF"].unique()) - 0.5,
-                y1=-0.5,
-                line=dict(color="black", width=2)
-            ),
-            # y-axis line
-            dict(
-                type="line",
-                x0=-0.5,
-                y0=-0.5,
-                x1=-0.5,
-                y1=len(df["Status"].unique()) - 0.5,
-                line=dict(color="black", width=2)
-            )
-        ],
-    )
+        # Update bubble sizes manually
+        fig.update_traces(marker=dict(size=bubble_sizes, sizemode='diameter'))
 
-    # Shrink the colorbar legend
-    fig.update_traces(
-        marker=dict(
-            colorbar=dict(
-                thickness=15,  # Adjust thickness (width) of the colorbar
-                len=0.5,  # Adjust length of the colorbar (0.0 to 1.0)
-                title=dict(
-                    text="Median Differences",
-                    side="right"  # Position of the colorbar title
+        # Add x-axis and y-axis lines and expand plot dimensions
+        fig.update_layout(
+            xaxis_title="TF",
+            yaxis_title="Status",
+            template="plotly_white",
+            yaxis=dict(dtick=1),  # Show every integer on y-axis
+            shapes=[
+                # x-axis line
+                dict(
+                    type="line",
+                    x0=-0.5,
+                    y0=-0.5,
+                    x1=len(df["TF"].unique()) - 0.5,
+                    y1=-0.5,
+                    line=dict(color="black", width=2)
+                ),
+                # y-axis line
+                dict(
+                    type="line",
+                    x0=-0.5,
+                    y0=-0.5,
+                    x1=-0.5,
+                    y1=len(df["Status"].unique()) - 0.5,
+                    line=dict(color="black", width=2)
+                )
+            ],
+        )
+
+        # Shrink the colorbar legend
+        fig.update_traces(
+            marker=dict(
+                colorbar=dict(
+                    thickness=15,  # Adjust thickness (width) of the colorbar
+                    len=0.5,  # Adjust length of the colorbar (0.0 to 1.0)
+                    title=dict(
+                        text="Fraction",
+                        side="right"  # Position of the colorbar title
+                    )
                 )
             )
         )
-    )
 
-    # Save and show the figure
-    fig.write_image(output_file, format='pdf')
-    fig.show()
+        # Save and show the figure
+        fig.write_image(output_file, format='pdf')
+        fig.show()
+    
+    else:
+        FIXED_BUBBLE_SIZE = 20  # You can adjust this value as needed
+        
+        # Create the scatter plot with median differences as the color
+        fig = px.scatter(
+            df,
+            x="TF",
+            y="Status",
+            color="Median Differences",  # Use Median Differences for color
+            color_continuous_scale="Viridis",  # Color scale
+            title=title,
+            labels={
+                "Fraction": "Fraction of Cells",
+                "Median Differences": "Median Differences"
+            }
+        )
+
+        # Update bubble sizes to be constant
+        fig.update_traces(marker=dict(size=FIXED_BUBBLE_SIZE, sizemode='diameter'))
+
+        # Add x-axis and y-axis lines and expand plot dimensions
+        fig.update_layout(
+            xaxis_title="TF",
+            yaxis_title="Status",
+            template="plotly_white",
+            yaxis=dict(dtick=1),  # Show every integer on y-axis
+            shapes=[
+                # x-axis line
+                dict(
+                    type="line",
+                    x0=-0.5,
+                    y0=-0.5,
+                    x1=len(df["TF"].unique()) - 0.5,
+                    y1=-0.5,
+                    line=dict(color="black", width=2)
+                ),
+                # y-axis line
+                dict(
+                    type="line",
+                    x0=-0.5,
+                    y0=-0.5,
+                    x1=-0.5,
+                    y1=len(df["Status"].unique()) - 0.5,
+                    line=dict(color="black", width=2)
+                )
+            ],
+        )
+
+        # Update the colorbar title to reflect Median Differences
+        fig.update_layout(
+            coloraxis_colorbar=dict(
+                thickness=15,  # Adjust thickness (width) of the colorbar
+                len=0.5,  # Adjust length of the colorbar (0.0 to 1.0)
+                title="Median Differences"  # Updated colorbar title
+            )
+        )
+
+        # Save and show the figure
+        fig.write_image(output_file, format='pdf')
+        fig.show()
 # def plot_bubble_plot(df, title, output_file):
 
 #     # Create the bubble plot
