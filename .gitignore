@@ -16,6 +16,7 @@
 *.celloracle.oracle
 *.pkl
 data/
+FASTQ/
 # History files
 .Rhistory
 .Rapp.history
