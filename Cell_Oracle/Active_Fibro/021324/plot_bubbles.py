@@ -47,10 +47,10 @@ df['Fraction'] = df['Fraction'].astype(float)
 df['Median Differences'] = df['Median Differences'].astype(float)
 
 title = 'AF_HFvControl_Bubble'
-output_file = '/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/Active_Fibro/021324/' + title + '.pdf'
-plot_bubble_plot(df, title, output_file)
-output_file = '/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/Active_Fibro/021324/size_legend.pdf'
-plot_bubble_size_legend([0.05, 0.1, 0.2, 0.3, 0.4, 0.5], 35, "Bubble Size Legend", output_file)
+output_file = 'Cell_Oracle/Active_Fibro/021324/' + title + '.pdf'
+plot_bubble_plot(df, title, output_file, max_bubble_size = 50, plot_bubble_size=True)
+output_file = 'Cell_Oracle/Active_Fibro/021324/size_legend.pdf'
+plot_bubble_size_legend([0.2, 0.4, 0.6, 0.8, 1.0], 50, "Bubble Size Legend", output_file)
 
 
 # the below code is not needed after revising the code

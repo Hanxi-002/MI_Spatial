@@ -168,7 +168,7 @@ class oracle_links:
                 temp_df = pd.DataFrame({'cluster':str(c), 'latent_factor': lf, 'linked_TF': linked_TF_list})
                 #linked_TF_df = linked_TF_df.append(temp_df)
                 linked_TF_df = pd.concat([linked_TF_df, temp_df])
-             
+
             gene_TF[str(c)] = gene_TF_lf
             linked_TF[str(c)] = linked_TF_df
         

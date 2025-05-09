@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/ix/djishnu/Hanxi/MI_Spatial/Cell_Oracle/COAnalyses")
+sys.path.append("Cell_Oracle/COAnalyses")
 import pickle as pkl
 from adata_oracle import *
 from oracle_links import *
@@ -46,13 +46,11 @@ df['Fraction'] = df['Fraction'].astype(float)
 df['Median Differences'] = df['Median Differences'].astype(float)
 
 title = 'CD68_Dist_Bubble'
-output_file = 'Cell_Oracle/CD68/021424/' + title + '_V1.pdf'
-plot_bubble_plot(df, title, output_file, plot_bubble_size=True)
+output_file = 'Cell_Oracle/CD68/021424/' + title + '.pdf'
+plot_bubble_plot(df, title, output_file, max_bubble_size = 50, plot_bubble_size=True)
 output_file = 'Cell_Oracle/CD68/021424/size_legend.pdf'
-plot_bubble_size_legend([0.05, 0.1, 0.2, 0.3, 0.4, 0.5], 35, "Bubble Size Legend", output_file)
+plot_bubble_size_legend([0.2, 0.4, 0.6, 0.8, 1.0], 50, "Bubble Size Legend", output_file)
 
-output_file = 'Cell_Oracle/CD68/021424/' + title + '_V2.pdf'
-plot_bubble_plot(df, title, output_file, plot_bubble_size=False)
 
 
 # ###################################################################################################

@@ -157,19 +157,19 @@ def calcualte_status_frac_and_diff_per_TF(magnitude_diff, status_dict, magnitude
         return None 
 
 
-def plot_bubble_plot(df, title, output_file, plot_bubble_size = True):
+def plot_bubble_plot(df, title, output_file, max_bubble_size, plot_bubble_size = True):
 
     if plot_bubble_size is True:
-        # Define fixed bubble size values
-        MIN_BUBBLE_SIZE = 0
-        MAX_BUBBLE_SIZE = 70  # Fixed bubble size across runs
         
         # Validate that "Fraction" is normalized between [0, 1]
-        assert df["Fraction"].max() <= 1 and df["Fraction"].min() >= 0, \
-            "Fraction column values must be between 0 and 1."
+        # assert df["Fraction"].max() <= 1 and df["Fraction"].min() >= 0, \
+        #     "Fraction column values must be between 0 and 1."
+
+        # Convert "Fraction" to percentage instead of decimal
+        df["Fraction"] = df["Fraction"] * 100
 
         # bubble_sizes = df["Fraction"] * MAX_BUBBLE_SIZE
-        bubble_sizes = df["Median Differences"] * MAX_BUBBLE_SIZE
+        bubble_sizes = df["Median Differences"] * max_bubble_size
 
         # Create the scatter plot without automatic size scaling
         fig = px.scatter(
@@ -367,17 +367,17 @@ def plot_bubble_size_legend(size_values, max_size, title, output_file):
         title (str): Title of the bubble size legend.
         output_file (str): Path to save the output image file.
     """
-    # Scale the bubble sizes
+    
     bubble_sizes = [v * max_size for v in size_values]
     
-    # Create dummy x and y positions to align the bubbles
+    
     x_positions = [1] * len(size_values)  # All bubbles on the same vertical line
     y_positions = list(range(len(size_values), 0, -1))  # Space them vertically
 
-    # Create the figure
+    
     fig = go.Figure()
 
-    # Add bubbles as scatter points
+    
     fig.add_trace(
         go.Scatter(
             x=x_positions,
@@ -395,18 +395,18 @@ def plot_bubble_size_legend(size_values, max_size, title, output_file):
         )
     )
 
-    # Update layout to make it clean and focused
+    
     fig.update_layout(
         title=dict(text=title, x=0.5, xanchor="center"),
         xaxis=dict(visible=False),
         yaxis=dict(visible=False),
-        height=300,  # Adjust height based on the number of bubbles
-        width=200,   # Narrow width for a compact legend
+        height=350, 
+        width=200, 
         margin=dict(l=20, r=20, t=50, b=20),
         plot_bgcolor="white"
     )
 
-    # Save and show the figure
+    
     fig.write_image(output_file, format='pdf')
     fig.show()
 
