@@ -17,6 +17,8 @@
 *.pkl
 data/
 FASTQ/
+CCC/Spacia/
+CCC/Spacia_Git/
 # History files
 .Rhistory
 .Rapp.history
