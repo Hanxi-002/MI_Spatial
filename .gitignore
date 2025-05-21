@@ -19,6 +19,7 @@ data/
 FASTQ/
 CCC/Spacia/
 CCC/Spacia_Git/
+GEO_Submission/
 # History files
 .Rhistory
 .Rapp.history
