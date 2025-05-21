@@ -1,0 +1,26 @@
+ImportError: No module named _multiarray_umath
+ImportError: No module named _multiarray_umath
+Traceback (most recent call last):
+  File "/ix/djishnu/TFH/hotnet2-master/HotNet2.py", line 139, in <module>
+    run(get_parser().parse_args(sys.argv[1:]))
+  File "/ix/djishnu/TFH/hotnet2-master/HotNet2.py", line 85, in run
+    single_runs, consensus, linkers, auto_deltas, consensus_stats = consensus_with_stats(args, networks, heats)
+  File "/ix/djishnu/TFH/hotnet2-master/hotnet2/consensus.py", line 17, in consensus_with_stats
+    single_runs, consensus, linkers, auto_deltas = consensus_run( args, networks, heats, verbose )
+  File "/ix/djishnu/TFH/hotnet2-master/hotnet2/consensus.py", line 73, in consensus_run
+    result = run_helper(args, infmat, indexToGene, G, nname, pnp, heat, hname, addtl_genes, get_deltas_hotnet2, HN2_INFMAT_NAME, HN2_MAX_CC_SIZES, args.verbose)
+  File "/ix/djishnu/TFH/hotnet2-master/hotnet2/run.py", line 20, in run_helper
+    deltas = get_deltas_fn(full_index2gene, heat, args.network_permutations, args.num_cores, infmat, addtl_genes, pnp, infmat_name, max_cc_sizes, verbose)
+  File "/ix/djishnu/TFH/hotnet2-master/hotnet2/run.py", line 63, in get_deltas_hotnet2
+    MAX_CC_SIZE, max_cc_sizes, False, num_perms, num_cores, verbose)
+  File "/ix/djishnu/TFH/hotnet2-master/hotnet2/delta.py", line 243, in get_deltas_for_network
+    sizes, not classic, num_cores, delta_selection_fn, verbose)
+  File "/ix/djishnu/TFH/hotnet2-master/hotnet2/delta.py", line 167, in network_delta_selection
+    delta_maps = map_fn(network_delta_wrapper, args)
+  File "/ihome/crc/install/python/anaconda2.7-4.2.0/lib/python2.7/multiprocessing/pool.py", line 251, in map
+    return self.map_async(func, iterable, chunksize).get()
+  File "/ihome/crc/install/python/anaconda2.7-4.2.0/lib/python2.7/multiprocessing/pool.py", line 567, in get
+    raise self._value
+IOError: Can't read data (File read failed: time = mon may 20 17:56:35 2024
+, filename = '/ix/djishnu/priyamvada/immport/network_analysis/networks/networks_to_run_hotnet/permuted_networks/homosapiens_binary_co_complex_feb2023_1_ppr_0.4_321.h5', file descriptor = 4, errno = 12, error message = 'cannot allocate memory', buf = 0x7fdd3b9cc000, total read size = 1080244496, bytes this sub-read = 1080244496, bytes actually read = 18446744073709551615, offset = 155420752)
+slurmstepd: error: Detected 200 oom-kill event(s) in StepId=3214900.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.

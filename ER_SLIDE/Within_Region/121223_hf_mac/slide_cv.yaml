@@ -1,0 +1,23 @@
+x_path: ./Data/x.csv
+y_path: ./Data/y.csv
+z_path : ./results/SLIDE_Results/z_matrix.csv
+out_path: ./results/SLIDE_CV/
+k: 10
+y_factor: TRUE
+y_levels: [0,1]
+nreps: 50
+eval_type: "auc"
+alpha_level: 0.05
+thresh_fdr: 0.5
+std_cv: TRUE
+std_y: TRUE
+permute: TRUE
+fdr: 0.1
+spec: 0.1
+ncore: 20
+f_size: 16
+method: 4
+niter: 20
+parallel: TRUE
+benchmark: False
+

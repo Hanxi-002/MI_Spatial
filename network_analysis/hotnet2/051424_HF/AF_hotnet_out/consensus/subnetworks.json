@@ -1,0 +1,1751 @@
+{
+    "consensus": [
+        {
+            "core": [
+                "FAM81A", 
+                "PABIR1", 
+                "PPP3R1", 
+                "RCAN1", 
+                "NAP1L2", 
+                "PPP3CB"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SCARB2", 
+                "MYOF"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "COLGALT2", 
+                "OAF", 
+                "TM2D3", 
+                "CLPSL1", 
+                "C1QC", 
+                "CPE", 
+                "C1QB", 
+                "CD4", 
+                "LRRC40", 
+                "CD6", 
+                "STBD1", 
+                "LAMB1", 
+                "GYG1", 
+                "XBP1", 
+                "CREBZF", 
+                "HLA-DRA", 
+                "LAMC1", 
+                "PRL", 
+                "NFE2L1", 
+                "PILRB", 
+                "NR2F2", 
+                "PILRA", 
+                "PYGB", 
+                "CNPY3", 
+                "H1-0", 
+                "CXCR4", 
+                "PARVA", 
+                "PTS", 
+                "NHLRC3", 
+                "FCN1", 
+                "HLA-DRB1", 
+                "PHOSPHO1", 
+                "HLA-DQB2", 
+                "LRRC1", 
+                "COL4A2", 
+                "COL4A1", 
+                "NUDT15", 
+                "CACNA2D2", 
+                "RSU1", 
+                "PODXL", 
+                "CCR5", 
+                "RNASE13", 
+                "LSP1", 
+                "COL14A1", 
+                "MUCL1", 
+                "C1QA", 
+                "ADAM9", 
+                "CXCL12", 
+                "OGN", 
+                "PTPRA", 
+                "FNDC5", 
+                "HLA-DMA", 
+                "SORBS1", 
+                "PXDN", 
+                "IL24"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SLITRK5", 
+                "IGHG2", 
+                "USF2", 
+                "MEGF8", 
+                "LGALS1", 
+                "PSG5", 
+                "PSG3", 
+                "PSG1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "IL6", 
+                "OSMR", 
+                "OSM", 
+                "LIFR", 
+                "CMYA5", 
+                "IL6ST"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SIRPG", 
+                "NINJ1", 
+                "HLA-G", 
+                "HLA-F", 
+                "SCYL1", 
+                "ZNF592", 
+                "MAPK15", 
+                "B2M", 
+                "LTF", 
+                "KIR3DL1", 
+                "COL3A1", 
+                "IGKC", 
+                "KDM5C", 
+                "HFE", 
+                "HTRA1", 
+                "P4HA2", 
+                "LILRB2", 
+                "ZNF532", 
+                "CLEC3B", 
+                "RPS6KB1", 
+                "IMPDH1", 
+                "TAPBP", 
+                "SPARC", 
+                "HLA-DQB1", 
+                "COL1A1", 
+                "PCOLCE", 
+                "CD200R1", 
+                "FCGRT", 
+                "COL1A2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ERF", 
+                "RTL8C", 
+                "SERPINA7"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "MSMO1", 
+                "MMP14", 
+                "TGFB3", 
+                "TIMP3", 
+                "TIMP2", 
+                "TIMP1", 
+                "RRAD", 
+                "ARL2", 
+                "ITGA5", 
+                "RAP1A", 
+                "RAPGEF5", 
+                "CNTN1", 
+                "FKBP2", 
+                "ADAM17", 
+                "CD9", 
+                "FURIN", 
+                "PSAT1", 
+                "RAB18", 
+                "RGL1", 
+                "CYFIP2", 
+                "THBS1", 
+                "HBEGF", 
+                "ENSA", 
+                "CDH2", 
+                "SLIT2", 
+                "RAP2B", 
+                "ITGB3", 
+                "RAP2A", 
+                "CD63", 
+                "RALGDS", 
+                "COL18A1", 
+                "MCAM", 
+                "COL5A1", 
+                "LUM", 
+                "TSPAN9", 
+                "CD151", 
+                "ITGAV", 
+                "PLG", 
+                "PLAC9", 
+                "PTPRB", 
+                "PDE6D", 
+                "MMP2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CHMP1B", 
+                "MITD1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PDCD10", 
+                "FRYL"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GABRG2", 
+                "GABRB2", 
+                "GABRB3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "IDH3A", 
+                "NAPSA", 
+                "RDH13"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "COPRS", 
+                "MAZ", 
+                "HINT1", 
+                "KDM4D"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GTPBP10", 
+                "PCBP4", 
+                "CSPG4"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RPAIN", 
+                "XRCC2", 
+                "RAD51B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "MRPL55", 
+                "MRPL48", 
+                "RBMS3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GAN", 
+                "ZC3H13"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DENND6A", 
+                "TMEM59", 
+                "BTN2A1", 
+                "UPK3BL1", 
+                "FMN2", 
+                "TYW1", 
+                "PDZD8"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SZT2", 
+                "NPRL3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "C2CD2", 
+                "SEC14L1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NPR3", 
+                "NPPB", 
+                "NPPA"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ZSCAN5A", 
+                "ZMYM4", 
+                "EPHB4"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TTC4", 
+                "GCC2", 
+                "PKD2", 
+                "PKD1", 
+                "FAM3D", 
+                "ALG5"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "WIPI1", 
+                "PPA1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "IGHM", 
+                "JCHAIN"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GATA4", 
+                "NKX2-5"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PRRG4", 
+                "WNT10B", 
+                "FSTL1", 
+                "VEGFA", 
+                "VEGFB", 
+                "COL6A2", 
+                "NRP1", 
+                "COX6A2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GABRB1", 
+                "NEUROD4"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RNF149", 
+                "PRRG3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TRAPPC1", 
+                "BCL2L14", 
+                "TRAPPC10"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "EDIL3", 
+                "CDKL1", 
+                "ADGRL1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "HERPUD1", 
+                "STARD9", 
+                "CAPN15"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "FGD6", 
+                "COL4A4"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "INAVA", 
+                "IPCEF1", 
+                "CYTH2", 
+                "CYTH3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CSRP2", 
+                "ARC"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PCF11", 
+                "AK1", 
+                "DECR1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ZNF529", 
+                "FTH1", 
+                "MYL2", 
+                "MYL3", 
+                "MYH7"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TMSB4X", 
+                "ACTA1", 
+                "DMC1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ATP6V1A", 
+                "ATP6V1C1", 
+                "ATP6V1E1", 
+                "ATP6V1B2", 
+                "ATP6V1G1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "HMGN2", 
+                "HMGN1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NRSN2", 
+                "ANKZF1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "WDR70", 
+                "PPWD1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DENND11", 
+                "SETBP1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RAD17", 
+                "RAD1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PTGDR", 
+                "ANKRD13C"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ZNF346", 
+                "ADARB1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DCN", 
+                "SERPINA5", 
+                "PPP4R4", 
+                "PLAU", 
+                "PLAT", 
+                "SERPINE1", 
+                "SERPINE2", 
+                "SERPINB6"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NOSIP", 
+                "TNNT2", 
+                "TPM2", 
+                "TPM1", 
+                "TNNC1", 
+                "TNNC2", 
+                "TNNI3", 
+                "LMOD2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TBX20", 
+                "CPTP", 
+                "PHF13"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PSMG4", 
+                "PSMG3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DBI", 
+                "PPCDC", 
+                "UBXN2A", 
+                "PPIG", 
+                "CLK1", 
+                "CENPT"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CRYGC", 
+                "CRYAB", 
+                "CCL22"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ABHD17A", 
+                "DYNC2I1", 
+                "DYNC2LI1", 
+                "VSIG8", 
+                "DYNLT2B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DAO", 
+                "DAOA"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CDAN1", 
+                "UBN1", 
+                "TLK2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TCAP", 
+                "OBSCN", 
+                "MYOM1", 
+                "HSPG2", 
+                "PDLIM3", 
+                "SPTB", 
+                "IFNA4", 
+                "ANK1", 
+                "PALLD", 
+                "ENO3", 
+                "MYOZ2", 
+                "CDCA4", 
+                "ALDOA", 
+                "ALDOC"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "KIF6", 
+                "HEATR5A", 
+                "FEZ2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GABPA", 
+                "ZC2HC1B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "HID1", 
+                "RCN3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RILPL1", 
+                "RAB12"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SRGN", 
+                "GZMB"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RASA4", 
+                "APMAP", 
+                "TXNIP", 
+                "SAMD4B", 
+                "CLK4", 
+                "RGMA"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "COX7C", 
+                "COX8A"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CCNY", 
+                "CYP51A1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "VWF", 
+                "ADAMTS13"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "AUH", 
+                "IBA57", 
+                "ECHDC2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CRIP2", 
+                "PCYT2", 
+                "ATP1B1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RHOC", 
+                "RAPH1", 
+                "NKTR", 
+                "SRGAP1", 
+                "ARHGAP1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "IGF2", 
+                "CLN5", 
+                "NMRK2", 
+                "IGFBP3", 
+                "GGA3", 
+                "IGFBP1", 
+                "IGFBP4", 
+                "IGF2R"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NDUFB9", 
+                "NDUFA1", 
+                "LCLAT1", 
+                "NDUFB4", 
+                "NDUFB3", 
+                "NDUFB2", 
+                "NDUFB1", 
+                "PRRT2", 
+                "NDUFV3", 
+                "NDUFB8", 
+                "NDUFB10", 
+                "TTC17", 
+                "NDUFS4", 
+                "NDUFS5", 
+                "NDUFS6", 
+                "NDUFB6", 
+                "PVRIG"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "KCMF1", 
+                "MRS2", 
+                "CST9"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SEC22C", 
+                "IL1RN", 
+                "IRF1", 
+                "SPI1", 
+                "CIITA", 
+                "IL12A", 
+                "ZSCAN29", 
+                "IL1B", 
+                "IL1R1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ZNF114", 
+                "CENATAC", 
+                "TXNL4B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PCARE", 
+                "UFM1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NSG2", 
+                "NDUFA2", 
+                "ATP5MJ", 
+                "HCFC1R1", 
+                "ACSF2", 
+                "APOC1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TGFB1I1", 
+                "PTK2B", 
+                "PLA2G3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NABP2", 
+                "INIP", 
+                "MTCH1", 
+                "NABP1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RAB11FIP1", 
+                "RELT"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "H2BW1", 
+                "PPP1R2B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TBCA", 
+                "MDH1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "EBF1", 
+                "ERO1A"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ACP5", 
+                "CIZ1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "G0S2", 
+                "SFRP4", 
+                "GADD45B", 
+                "FBN2", 
+                "RPL30", 
+                "MAP2K7", 
+                "DCAF16", 
+                "LDLRAP1", 
+                "MAPK8IP3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TUBGCP6", 
+                "MZT2B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "HSPB7", 
+                "HSPB8"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "MYOM2", 
+                "MT2A", 
+                "ANKRD1", 
+                "JMJD1C"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ARL8B", 
+                "CTSL", 
+                "BTN3A3", 
+                "CTSV"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CHMP4A", 
+                "PTPN23"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DGKZ", 
+                "CEBPG", 
+                "WDR89", 
+                "MYZAP"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DENND10", 
+                "ALDH1A1", 
+                "ALDH2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ZFP36", 
+                "ALOX5", 
+                "SNUPN", 
+                "ZFP36L1", 
+                "COTL1", 
+                "MAPKAPK2", 
+                "PDP1", 
+                "AKT2", 
+                "RPL17", 
+                "HSD17B1", 
+                "SLA", 
+                "PAFAH1B2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SGSM3", 
+                "KLF8"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SERPINC1", 
+                "SERPING1", 
+                "CBWD2", 
+                "SUCLG1", 
+                "ISCA2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SLC23A2", 
+                "COA1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SMIM40", 
+                "ATRX", 
+                "SPIN3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "EXOC2", 
+                "SHTN1", 
+                "FABP3", 
+                "EXOC6B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "E2F5", 
+                "LIN54", 
+                "E2F3", 
+                "E2F4"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CFHR1", 
+                "CFH"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "MSL1", 
+                "MSL3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ADPRS", 
+                "HEXD"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "MBD5", 
+                "ASXL2", 
+                "KRBOX4", 
+                "TTC3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NUCB1", 
+                "NARS1", 
+                "PRXL2B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PDCL2", 
+                "FAM126B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SYTL5", 
+                "RAB27B", 
+                "CCDC85A"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GRHPR", 
+                "CDC14B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "FBLN7", 
+                "EDEM2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "LOXL1", 
+                "FBLN5"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PLEKHA1", 
+                "CLDN14"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CYP11A1", 
+                "FDX1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "EIF3A", 
+                "EIF3K", 
+                "ANGEL1", 
+                "EIF3G"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RUNX3", 
+                "CHGB", 
+                "CBFB"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "H2AC6", 
+                "CENPC"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "LDB3", 
+                "NPC2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "REV1", 
+                "REV3L"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "POTEE", 
+                "ARHGEF25"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ZNF699", 
+                "HRC"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PRRG2", 
+                "PDE3A", 
+                "SLFN12", 
+                "KLKB1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "STAT6", 
+                "FCER2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SMDT1", 
+                "NSMCE4A", 
+                "TBC1D22A", 
+                "MICU2", 
+                "EID3", 
+                "NSMCE2", 
+                "NSMCE3", 
+                "EXOG"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "HSPB6", 
+                "UBR3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "HRNR", 
+                "FOXN3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SEPTIN2", 
+                "SEPTIN11", 
+                "SEPTIN5", 
+                "SUB1", 
+                "SEPTIN10", 
+                "SEPTIN7"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DPEP2NB", 
+                "NBL1", 
+                "LRIG1", 
+                "CANT1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PLK3", 
+                "KPNA5", 
+                "SPOPL", 
+                "RAD52"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "MRNIP", 
+                "PKIA"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "COX7B", 
+                "COX6C"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DPYSL2", 
+                "DPYSL3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "AREG", 
+                "ICAM1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CTSZ", 
+                "KRTAP10-10"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "IGFBP2", 
+                "GSDMB"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TRIT1", 
+                "SHE"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "F12", 
+                "ACADVL", 
+                "HIBCH", 
+                "PRORP"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "HACD1", 
+                "PTTG1IP", 
+                "TMEM106C", 
+                "MYADM"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ATP5F1D", 
+                "FRMD3", 
+                "ACKR3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NFYB", 
+                "MAOB", 
+                "NFYA", 
+                "HOXD12", 
+                "FGF14"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SNTA1", 
+                "SETD5", 
+                "DCTD", 
+                "DPPA2", 
+                "FGF12", 
+                "ZNF460", 
+                "SCN5A", 
+                "PBXIP1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "B4GALT1", 
+                "OR10G4"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PRPF39", 
+                "TRNAU1AP"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ZFP1", 
+                "AKR1C2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RAB19", 
+                "VCAN"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PNPLA2", 
+                "SERPINF1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CLIC4", 
+                "CLIC5", 
+                "GATD3A"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GMPPA", 
+                "GMPPB", 
+                "PI4K2B", 
+                "PRUNE1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RIC8B", 
+                "RASL10A"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TMOD1", 
+                "LRRFIP1", 
+                "LRRFIP2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RARB", 
+                "PNRC1", 
+                "PNRC2", 
+                "GLOD4", 
+                "PPARGC1A", 
+                "RORA"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "EDNRA", 
+                "SYNGR2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RUFY1", 
+                "GPATCH4", 
+                "SRA1", 
+                "OAZ1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GMFG", 
+                "ASAH1", 
+                "CAMK1D"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "GINS1", 
+                "TIPIN"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RND3", 
+                "PLEKHG5"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ALDH1B1", 
+                "FEM1B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "REC8", 
+                "CFDP1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "KCND2", 
+                "KCNIP2", 
+                "DPP6"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CHD2", 
+                "ELOA2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NCF1", 
+                "CYBA", 
+                "NCF4"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ZNF391", 
+                "TMEM159"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "TAMM41", 
+                "MLYCD", 
+                "MIX23"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DCBLD2", 
+                "MFSD4B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CACNA2D1", 
+                "MYH7B", 
+                "ETFDH"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "KCNJ2", 
+                "KCNJ5"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "EML1", 
+                "ISG20L2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SLC9A6", 
+                "TMEM100", 
+                "IFNGR1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PCYT1A", 
+                "FAM118A", 
+                "ATOX1", 
+                "MOB3C"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CNN3", 
+                "CNN2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SLTM", 
+                "PRPF38B"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CXCL8", 
+                "EGR1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "DPY19L2", 
+                "GUK1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "OTUD6B", 
+                "LIMCH1", 
+                "BTBD1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "IL13RA2", 
+                "IL13RA1", 
+                "IL13"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "NFIX", 
+                "ZNF614"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SOCS5", 
+                "TMBIM1", 
+                "PROK2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RAB22A", 
+                "ALS2CL"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "LAMTOR4", 
+                "LAMTOR1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CCNG2", 
+                "PPP2R5C"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CHRNB4", 
+                "CHRNA3"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "C7", 
+                "C8G"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "RPL36A", 
+                "L3MBTL1", 
+                "ZNF146"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ABI3BP", 
+                "GOT1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CKMT2", 
+                "ABHD6", 
+                "OLFML3", 
+                "ELN"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "BCL9L", 
+                "SSBP3", 
+                "TAL1", 
+                "SSBP4"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "PIGP", 
+                "PIGA"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "C1S", 
+                "C1R"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "CREBRF", 
+                "CREBL2"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "STH", 
+                "SOHLH1"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "ISCU", 
+                "SDHB"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "COG7", 
+                "COG5"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "SGCD", 
+                "FAM241A"
+            ], 
+            "expansion": []
+        }, 
+        {
+            "core": [
+                "EHD3", 
+                "EHD1"
+            ], 
+            "expansion": []
+        }
+    ], 
+    "deltas": [
+        0.21790576757537067
+    ], 
+    "linkers": [], 
+    "params": {
+        "consensus_permutations": 0, 
+        "delta": 0.23192303341447845, 
+        "deltas": [], 
+        "display_name_file": null, 
+        "display_score_file": null, 
+        "heat_files": [
+            "/ix/djishnu/Hanxi/MI_Spatial/network_analysis/hotnet2/051424/active_fibroblast.txt"
+        ], 
+        "heat_name": "active_fibroblast", 
+        "heat_permutations": 500, 
+        "min_cc_size": 2, 
+        "network_files": [
+            "/ix/djishnu/Priyamvada/Immport/Network_analysis/Networks/Networks_to_run_hotnet/HomoSapiens_binary_co_complex_Feb2023_1_ppr_0.4.h5"
+        ], 
+        "network_name": "HomoSapiens_binary_co_complex_Feb2023", 
+        "network_permutations": 500, 
+        "num_cores": -1, 
+        "output_directory": "/ix/djishnu/Hanxi/MI_Spatial/network_analysis/hotnet2/051424/AF_hotnet_out", 
+        "output_hierarchy": false, 
+        "permuted_network_paths": [
+            "/ix/djishnu/Priyamvada/Immport/Network_analysis/Networks/Networks_to_run_hotnet/permuted_networks/HomoSapiens_binary_co_complex_Feb2023_1_ppr_0.4_##NUM##.h5"
+        ], 
+        "verbose": 1
+    }, 
+    "stats": {
+        "2": {
+            "expected": 0.0, 
+            "observed": 189, 
+            "pval": 1.0
+        }, 
+        "3": {
+            "expected": 0.0, 
+            "observed": 90, 
+            "pval": 1.0
+        }, 
+        "4": {
+            "expected": 0.0, 
+            "observed": 50, 
+            "pval": 1.0
+        }, 
+        "5": {
+            "expected": 0.0, 
+            "observed": 30, 
+            "pval": 1.0
+        }, 
+        "6": {
+            "expected": 0.0, 
+            "observed": 24, 
+            "pval": 1.0
+        }, 
+        "7": {
+            "expected": 0.0, 
+            "observed": 16, 
+            "pval": 1.0
+        }, 
+        "8": {
+            "expected": 0.0, 
+            "observed": 15, 
+            "pval": 1.0
+        }, 
+        "9": {
+            "expected": 0.0, 
+            "observed": 8, 
+            "pval": 1.0
+        }, 
+        "10": {
+            "expected": 0.0, 
+            "observed": 6, 
+            "pval": 1.0
+        }
+    }
+}

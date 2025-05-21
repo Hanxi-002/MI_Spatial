@@ -1,0 +1,533 @@
+{
+    "statistics": {
+        "2": {
+            "expected": 91.766, 
+            "pval": 0.02, 
+            "observed": 103
+        }, 
+        "3": {
+            "expected": 23.078, 
+            "pval": 0.656, 
+            "observed": 22
+        }, 
+        "4": {
+            "expected": 6.576, 
+            "pval": 0.506, 
+            "observed": 7
+        }, 
+        "5": {
+            "expected": 2.862, 
+            "pval": 0.3, 
+            "observed": 4
+        }, 
+        "6": {
+            "expected": 1.248, 
+            "pval": 0.372, 
+            "observed": 2
+        }, 
+        "7": {
+            "expected": 0.704, 
+            "pval": 0.526, 
+            "observed": 1
+        }, 
+        "8": {
+            "expected": 0.282, 
+            "pval": 0.25, 
+            "observed": 1
+        }, 
+        "9": {
+            "expected": 0.15, 
+            "pval": 1.0, 
+            "observed": 0
+        }, 
+        "10": {
+            "expected": 0.078, 
+            "pval": 1.0, 
+            "observed": 0
+        }
+    }, 
+    "components": [
+        [
+            "COL1A1", 
+            "COL1A2", 
+            "COL3A1", 
+            "HTRA1", 
+            "P4HA2", 
+            "PCOLCE", 
+            "SCYL1", 
+            "SPARC"
+        ], 
+        [
+            "COL6A2", 
+            "COX6A2", 
+            "FSTL1", 
+            "VEGFA", 
+            "VEGFB", 
+            "WNT10B"
+        ], 
+        [
+            "C1QB", 
+            "C1QC", 
+            "COL4A1", 
+            "COL4A2", 
+            "STBD1"
+        ], 
+        [
+            "IL1B", 
+            "IL1R1", 
+            "IL1RN", 
+            "SEC22C", 
+            "ZSCAN29"
+        ], 
+        [
+            "FTH1", 
+            "MYL2", 
+            "MYL3", 
+            "ZNF529"
+        ], 
+        [
+            "HLA-DQB2", 
+            "OAF", 
+            "PRL", 
+            "TM2D3"
+        ], 
+        [
+            "TNNC1", 
+            "TNNC2", 
+            "TNNI3", 
+            "TNNT2"
+        ], 
+        [
+            "APMAP", 
+            "CLK4", 
+            "RASA4"
+        ], 
+        [
+            "ATRX", 
+            "SMIM40", 
+            "SPIN3"
+        ], 
+        [
+            "AUH", 
+            "ECHDC2", 
+            "IBA57"
+        ], 
+        [
+            "B2M", 
+            "HLA-G", 
+            "LILRB2"
+        ], 
+        [
+            "CACNA2D2", 
+            "MUCL1", 
+            "RNASE13"
+        ], 
+        [
+            "CCDC85A", 
+            "RAB27B", 
+            "SYTL5"
+        ], 
+        [
+            "CD74", 
+            "HLA-DQB1", 
+            "TM4SF20"
+        ], 
+        [
+            "DCN", 
+            "PLAT", 
+            "SERPINE1"
+        ], 
+        [
+            "DPP6", 
+            "KCND2", 
+            "KCNIP2"
+        ], 
+        [
+            "GABRB2", 
+            "GABRB3", 
+            "GABRG2"
+        ], 
+        [
+            "GMPPB", 
+            "PI4K2B", 
+            "PRUNE1"
+        ], 
+        [
+            "IDH3A", 
+            "NAPSA", 
+            "RDH13"
+        ], 
+        [
+            "LTF", 
+            "MAPK15", 
+            "SIRPG"
+        ], 
+        [
+            "NPPA", 
+            "NPPB", 
+            "NPR3"
+        ], 
+        [
+            "PROK2", 
+            "SOCS5", 
+            "TMBIM1"
+        ], 
+        [
+            "ABI3BP", 
+            "GOT1"
+        ], 
+        [
+            "ACTA1", 
+            "TMSB4X"
+        ], 
+        [
+            "ADAM17", 
+            "TIMP3"
+        ], 
+        [
+            "ADAMTS13", 
+            "VWF"
+        ], 
+        [
+            "ALS2CL", 
+            "RAB22A"
+        ], 
+        [
+            "ANKRD13C", 
+            "PTGDR"
+        ], 
+        [
+            "ANKZF1", 
+            "NRSN2"
+        ], 
+        [
+            "AREG", 
+            "ICAM1"
+        ], 
+        [
+            "ARL2", 
+            "PDE6D"
+        ], 
+        [
+            "ASXL2", 
+            "MBD5"
+        ], 
+        [
+            "ATP1B1", 
+            "CRIP2"
+        ], 
+        [
+            "B4GALT1", 
+            "OR10G4"
+        ], 
+        [
+            "C1R", 
+            "C1S"
+        ], 
+        [
+            "C2CD2", 
+            "SEC14L1"
+        ], 
+        [
+            "C7", 
+            "C8G"
+        ], 
+        [
+            "CAMK1D", 
+            "GMFG"
+        ], 
+        [
+            "CANT1", 
+            "LRIG1"
+        ], 
+        [
+            "CCR5", 
+            "CD4"
+        ], 
+        [
+            "CD63", 
+            "TIMP1"
+        ], 
+        [
+            "CDKL1", 
+            "EDIL3"
+        ], 
+        [
+            "CFH", 
+            "CFHR1"
+        ], 
+        [
+            "CHRNA3", 
+            "CHRNB4"
+        ], 
+        [
+            "CLIC4", 
+            "CLIC5"
+        ], 
+        [
+            "CNN2", 
+            "CNN3"
+        ], 
+        [
+            "COL4A4", 
+            "FGD6"
+        ], 
+        [
+            "COX7C", 
+            "COX8A"
+        ], 
+        [
+            "CPTP", 
+            "PHF13"
+        ], 
+        [
+            "CREBL2", 
+            "CREBRF"
+        ], 
+        [
+            "CYP11A1", 
+            "FDX1"
+        ], 
+        [
+            "DAO", 
+            "DAOA"
+        ], 
+        [
+            "DBI", 
+            "UBXN2A"
+        ], 
+        [
+            "DENND11", 
+            "SETBP1"
+        ], 
+        [
+            "DPY19L2", 
+            "GUK1"
+        ], 
+        [
+            "E2F3", 
+            "E2F5"
+        ], 
+        [
+            "EBF1", 
+            "ERO1A"
+        ], 
+        [
+            "EDEM2", 
+            "FBLN7"
+        ], 
+        [
+            "EDNRA", 
+            "SYNGR2"
+        ], 
+        [
+            "EHD1", 
+            "EHD3"
+        ], 
+        [
+            "FAM126B", 
+            "PDCL2"
+        ], 
+        [
+            "FAM241A", 
+            "SGCD"
+        ], 
+        [
+            "FAM81A", 
+            "NAP1L2"
+        ], 
+        [
+            "FBLN5", 
+            "LOXL1"
+        ], 
+        [
+            "FGF14", 
+            "HOXD12"
+        ], 
+        [
+            "GABPA", 
+            "ZC2HC1B"
+        ], 
+        [
+            "GABRB1", 
+            "NEUROD4"
+        ], 
+        [
+            "GATA4", 
+            "NKX2-5"
+        ], 
+        [
+            "GINS1", 
+            "TIPIN"
+        ], 
+        [
+            "GSDMB", 
+            "IGFBP2"
+        ], 
+        [
+            "H2BW1", 
+            "PPP1R2B"
+        ], 
+        [
+            "HCFC1R1", 
+            "NSG2"
+        ], 
+        [
+            "HEATR5A", 
+            "KIF6"
+        ], 
+        [
+            "HLA-DRA", 
+            "HLA-DRB1"
+        ], 
+        [
+            "HRC", 
+            "ZNF699"
+        ], 
+        [
+            "IGFBP1", 
+            "IGFBP4"
+        ], 
+        [
+            "IL13", 
+            "IL13RA1"
+        ], 
+        [
+            "KLF8", 
+            "SGSM3"
+        ], 
+        [
+            "LDB3", 
+            "NPC2"
+        ], 
+        [
+            "MAPKAPK2", 
+            "ZFP36L1"
+        ], 
+        [
+            "MEGF8", 
+            "PSG3"
+        ], 
+        [
+            "MRNIP", 
+            "PKIA"
+        ], 
+        [
+            "MRPL55", 
+            "RBMS3"
+        ], 
+        [
+            "NCF1", 
+            "NCF4"
+        ], 
+        [
+            "NDUFB2", 
+            "NDUFB3"
+        ], 
+        [
+            "NFIX", 
+            "ZNF614"
+        ], 
+        [
+            "NFYA", 
+            "NFYB"
+        ], 
+        [
+            "NSMCE3", 
+            "NSMCE4A"
+        ], 
+        [
+            "PCARE", 
+            "UFM1"
+        ], 
+        [
+            "PLAC9", 
+            "RAPGEF5"
+        ], 
+        [
+            "PLEKHG5", 
+            "RND3"
+        ], 
+        [
+            "PNPLA2", 
+            "SERPINF1"
+        ], 
+        [
+            "PNRC2", 
+            "RORA"
+        ], 
+        [
+            "PRRG3", 
+            "RNF149"
+        ], 
+        [
+            "RAB12", 
+            "RILPL1"
+        ], 
+        [
+            "RAB19", 
+            "VCAN"
+        ], 
+        [
+            "RAD51B", 
+            "XRCC2"
+        ], 
+        [
+            "RALGDS", 
+            "RAP2B"
+        ], 
+        [
+            "REV1", 
+            "REV3L"
+        ], 
+        [
+            "SERPINB6", 
+            "SERPINE2"
+        ], 
+        [
+            "SHE", 
+            "TRIT1"
+        ], 
+        [
+            "TMEM159", 
+            "ZNF391"
+        ], 
+        [
+            "TMEM59", 
+            "TYW1"
+        ]
+    ], 
+    "parameters": {
+        "display_name_file": null, 
+        "display_score_file": null, 
+        "deltas": [], 
+        "verbose": 1, 
+        "heat_permutations": 500, 
+        "num_cores": -1, 
+        "network_permutations": 500, 
+        "output_directory": "/ix/djishnu/Hanxi/MI_Spatial/network_analysis/hotnet2/051424_HF/CD68_far_hotnet_out", 
+        "heat_files": [
+            "/ix/djishnu/Hanxi/MI_Spatial/network_analysis/hotnet2/051424_HF/CD_68_far.txt"
+        ], 
+        "output_hierarchy": false, 
+        "consensus_permutations": 0, 
+        "delta": 0.4067082118353592, 
+        "min_cc_size": 2, 
+        "network_files": [
+            "/ix/djishnu/Priyamvada/Immport/Network_analysis/Networks/Networks_to_run_hotnet/HomoSapiens_binary_co_complex_Feb2023_1_ppr_0.4.h5"
+        ], 
+        "network_name": "HomoSapiens_binary_co_complex_Feb2023", 
+        "permuted_network_paths": [
+            "/ix/djishnu/Priyamvada/Immport/Network_analysis/Networks/Networks_to_run_hotnet/permuted_networks/HomoSapiens_binary_co_complex_Feb2023_1_ppr_0.4_##NUM##.h5"
+        ], 
+        "heat_name": "CD_68_far"
+    }, 
+    "sizes": {
+        "2": 81, 
+        "3": 15, 
+        "4": 3, 
+        "5": 2, 
+        "6": 1, 
+        "8": 1
+    }
+}
